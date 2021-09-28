@@ -16,14 +16,16 @@ namespace ft {
 
 		typedef typename allocator_type::reference reference;
 		typedef typename allocator_type::const_reference const_reference;
-		typedef	allocator_type::pointer	pointer;	 //for the default allocator: value_type*
-		typedef 	allocator_type::const_pointer	const_pointer; //for the default allocator: const value_type*
-		typedef typename vector_iterator<vector<value_type> > iterator; //	a random access iterator to value_type	convertible to const_iterator
-		typedef const_iterator	a random access iterator to const value_type	
-		typedef reverse_iterator	reverse_iterator<iterator>	
-		typedef const_reverse_iterator	reverse_iterator<const_iterator>	
-		typedef difference_type	a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
-		typedef size_type
+		typedef	typename allocator_type::pointer	pointer;	 //for the default allocator: value_type*
+		typedef typename allocator_type::const_pointer	const_pointer; //for the default allocator: const value_type*
+		
+		
+		//typedef typename vector_iterator<vector<value_type> > iterator; //	a random access iterator to value_type	convertible to const_iterator
+		// typedef const_iterator;//	a random access iterator to const value_type	
+		// typedef reverse_iterator	reverse_iterator<iterator>	
+		// typedef const_reverse_iterator	reverse_iterator<const_iterator>	
+		// typedef difference_type	a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
+		// typedef size_type
 
 
 
