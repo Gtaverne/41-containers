@@ -25,28 +25,96 @@ namespace ft {
 		// typedef reverse_iterator	reverse_iterator<iterator>	
 		// typedef const_reverse_iterator	reverse_iterator<const_iterator>	
 		
-		typedef difference_type
-		typedef size_type size_t
+		typedef std::ptrdiff_t difference_type;
+		typedef size_t size_type;
 
-		explicit vector (const allocator_type& alloc = allocator_type())): _raw(NULL), _max_capa(0), _current_capa(0)  {};
+//**********************************************//
+// Constructors and destructors                 //
+//**********************************************//
 
-		~vector() {};
+		explicit vector (const allocator_type& alloc = allocator_type()): _raw(NULL), _alloc_type(alloc), _max_len(0), _current_len(0)
+		{}
+
+		~vector()
+		{
+			// this->clear();
+			_alloc_type.deallocate(_raw, _max_len);
+		}
 		
 		vector & operator=(vector const & rhs)
 		{
+			if (this == &rhs)
+				return *this;
+			_max_len = rhs._max_len;
+			_current_len = rhs._current_len;
+			_alloc_type.deallocate(_raw, _max_len);
 			//we must make a deep copy
-
-			_capa_max = rhs._max_capa;
-			_capa_current = rhs._current_capa;
+			_raw = rhs._raw;
+			return *this;
 		}
+//**********************************************//
+// Iterators                                    //
+//**********************************************//
+
+// begin
+// end
+// rbegin
+// rend
+
+//**********************************************//
+// Capacity                                     //
+//**********************************************//
+
+// size
+// max_size
+// resize
+// capacity
+// empty
+// reserve
+
+//**********************************************//
+// Element access                               //
+//**********************************************//
+
+// operator[]
+// at
+// front
+// back
+
+//**********************************************//
+// Modifiers                                    //
+//**********************************************//
+
+// assign
+// push_back
+// pop_back
+// insert
+// erase
+// swap
+// clear
+
+//**********************************************//
+// Allocator                                    //
+//**********************************************//
+
+// get_allocator
+
 
 
 
 	private:
-		value_type _raw;
-		size_type _capa_max;
-		size_type _capa_current;
+		value_type *_raw;
+		allocator_type _alloc_type;
+		size_type _max_len;
+		size_type _current_len;
 	};
+
+//**********************************************//
+// Non member functions overload                //
+//**********************************************//
+
+// relational operators
+// swap
 
 };
 
