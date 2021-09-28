@@ -1,4 +1,4 @@
-NAME	=	finder
+NAME	=	containers
 CC		=	clang++
 HEADER	=	sources/Map.hpp sources/Stack.hpp sources/Vector.hpp \
 			test/test.hpp
