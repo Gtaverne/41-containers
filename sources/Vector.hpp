@@ -28,6 +28,28 @@ namespace ft {
 		typedef std::ptrdiff_t difference_type;
 		typedef size_t size_type;
 
+	private:
+		pointer _raw_data;
+		allocator_type _alloc_type;
+		size_type _max_capa;
+		size_type _current_len;
+
+		void grow_raw(size_type to_add)
+		{
+			if ( _current_len + to_add <= _max_capa)
+				return ;
+			if (_max_capa == 0)
+				_max_capa = 1;
+			while ( to_add + _current_len > _max_capa)
+				_max_capa *= 2;
+			pointer res = _alloc_type.allocate(_max_capa);
+			for (size_type i = 0; i < _current_len; i++)
+				res[i] = _raw_data[i];
+			delete[] _raw_data;
+			_raw_data = res;
+		}
+
+	public:
 //**********************************************//
 // Constructors and destructors                 //
 //**********************************************//
@@ -66,30 +88,52 @@ namespace ft {
 // Capacity                                     //
 //**********************************************//
 
-size_type size(void) {return _current_len;};
+// size
+size_type size(void) const {return _current_len;};
+
 // max_size
-size_type max_size(void) {return _alloc_type.max_size();};
+size_type max_size(void) const {return _alloc_type.max_size();};
+
 // resize  Voici qui est absolument degueulasse
+void resize (size_type n, value_type val = value_type())
+{
+	//FONCTION A COMPLETER
+	if (n > _max_capa)
+	{
+		size_type temp = _max_capa;
+		grow_raw(n - _max_capa);
+		for (size_type i = 0; i < n - temp; i++)
+			push_back(val);
+	}
+}
+
+
 // capacity
+size_type capacity() const {return _max_capa;};
+
 // empty
+bool empty() const {return (_current_len == 0);};
+
 // reserve
 void reserve (size_type n);
-// {
-// 	if (n > max_size())
-// 		throw std::length_error("You are trying to reserve more than vector::max_size()");
-// 	if (n > _max_capacity)
-// 	{
-
-// 	}
-// }
+{
+	//FONCTION A COMPLETER
+	if (n > _max_capa)
+	{
+		size_type temp = _max_capa;
+		grow_raw(n - _max_capa);
+		for (size_type i = 0; i < n - temp; i++)
+			push_back(val);
+	}
+}
 
 //**********************************************//
 // Element access                               //
 //**********************************************//
 
 // operator[]
-    reference operator[] (size_type n);
-	const_reference operator[] (size_type n) const;
+    reference operator[] (size_type n) {return _raw_data[n];};
+	const_reference operator[] (size_type n) const {return _raw_data[n];};
 // at
 // front
 // back
@@ -101,17 +145,18 @@ void reserve (size_type n);
 // assign
 
 // push_back
-// void push_back (const value_type &val)
-// {
-// 	if (_max_capa == 0)
-// 	{
-// 		//faire proprement la fonction d'allocation
-// 		if (_current_len == 0)
-// 			reserve(1);
-// 		else
-// 			reserve (2 * _current_len);
-// 	}
-	
+void push_back (const value_type &val)
+{
+	if (_max_capa == _current_len)
+	{
+		if (_current_len == 0)
+			grow_raw(1);
+		else
+			grow_raw (2 * _current_len);
+	}
+	_raw_data[_current_len] = val;
+	_current_len++;
+}
 // }
 
 // pop_back
@@ -123,12 +168,12 @@ void reserve (size_type n);
 // swap
 
 // clear
-// void clear(void)
-// {
-// 	for (iterator it = begin(); i != end(); it++)
-// 		_raw_data.destroy(&(*it));
-// 	_max_capa = 0;
-// }
+void clear(void)
+{
+	// for (iterator it = begin(); i != end(); it++)
+	// 	_raw_data.destroy(&(*it));
+	_max_capa = 0;
+}
 
 //**********************************************//
 // Allocator                                    //
@@ -139,11 +184,8 @@ void reserve (size_type n);
 
 
 
-	private:
-		value_type *_raw_data;
-		allocator_type _alloc_type;
-		size_type _max_capa;
-		size_type _current_len;
+
+
 	};
 
 //**********************************************//
@@ -152,7 +194,6 @@ void reserve (size_type n);
 
 // relational operators
 // swap
-
 };
 
 
