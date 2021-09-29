@@ -7,13 +7,30 @@
 
 int main ()
 {
+//**********************************************//
+// Testeur de vecteur                           //
+//**********************************************//
+	{
 	std::vector<int> vec;
-	vec.push_back(1022);
-	std::cout << vec[0] << std::endl;
+	for (int i = 0; i < 100 ; i++)
+		vec.push_back(i);
+	std::cout << "vec[33]: " << vec[33] << std::endl;
+
+	std::cout << "size " << vec.size() << std::endl;
+	std::cout << "max_size " << vec.max_size() << std::endl;
+
+	std::cout << "capacity " << vec.capacity() << std::endl;
+	vec.resize(10000);
+	std::cout << "Capacity after resize " << vec.capacity() << std::endl;
+	std::cout << "empty " << vec.empty() << std::endl;
+	
+
+	}
 
 	ft::vector<int> ft_myvec;
 	ft::vector<int> ft_mysecvec;
 	ft_mysecvec = ft_myvec;
+
 
 
 	
