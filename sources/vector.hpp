@@ -58,6 +58,17 @@ namespace ft {
 		explicit vector (const allocator_type& alloc = allocator_type()): _raw_data(NULL), _alloc_type(alloc), _max_capa(0), _current_len(0)
 		{}
 
+		explicit vector (size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _raw_data(NULL), _alloc_type(alloc), _max_capa(0), _current_len(0)
+		{
+			reserve(n);
+			_current_len = n;
+			_max_capa = n;
+			for (size_type i = 0; i < _current_len; i++)
+			{
+				_alloc_type.construct(&_raw_data[i], val);
+			}
+		}
+
 		~vector()
 		{
 			this->clear();

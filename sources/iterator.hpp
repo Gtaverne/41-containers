@@ -98,6 +98,7 @@ namespace ft
 
 		reference_type operator*(void) const	{return (*ptr_iter);};
 		pointer_type operator->(void) const {return (ptr_iter);};
+		reference_type operator[](difference_type n) {return (ptr_iter[n]);};
 
 	};
 

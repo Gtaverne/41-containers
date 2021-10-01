@@ -21,7 +21,7 @@ int main ()
 	std::cout << "max_size " << vec.max_size() << std::endl;
 
 	std::cout << "capacity " << vec.capacity() << std::endl;
-	vec.resize(10);
+	//vec.resize(10);
 	std::cout << "Capacity after resize " << vec.capacity() << std::endl;
 	std::cout << "empty " << vec.empty() << std::endl;
 
@@ -29,6 +29,7 @@ int main ()
 	std::cout << "begin " << *vec.begin() << std::endl;
 	std::cout << "incremented " << *(--(vec.begin() + 5)) << std::endl;
 	std::cout << "end " << *vec.end() << std::endl;
+	std::cout << "[] operator " << vec.begin()[8] << std::endl;
 	}
 
 //**********************************************//
@@ -48,14 +49,16 @@ std::cout << std::endl << "Here comes my tester " << std::endl;
 	std::cout << "max_size " << vec.max_size() << std::endl;
 
 	std::cout << "capacity " << vec.capacity() << std::endl;
-	vec.resize(10);
+	//vec.resize(10);
 	std::cout << "Capacity after resize " << vec.capacity() << std::endl;
 	std::cout << "empty " << vec.empty() << std::endl;
 
 	//iterators
+	std::cout << "TEST OF ITERATORS" << std::endl;
 	std::cout << "begin " << *vec.begin() << std::endl;
 	std::cout << "incremented " << *(--(vec.begin() + 5)) << std::endl;
 	std::cout << "end " << *vec.end() << std::endl;
+	std::cout << "[] operator " << vec.begin()[8] << std::endl;
 
 	}
 
