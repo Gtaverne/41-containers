@@ -21,8 +21,8 @@ namespace ft {
 		typedef typename allocator_type::const_pointer	const_pointer;
 		
 		// ON VERRA LES ITERATORS PLUS TARD
-		// typedef typename vector_iterator<vector<value_type> > iterator;
-		// typedef const_iterator;//	a random access iterator to const value_type	
+		typedef ft::my_iterator<value_type> iterator;
+		typedef ft::my_iterator<value_type const> const_iterator;//	a random access iterator to const value_type	
 		// typedef reverse_iterator	reverse_iterator<iterator>	
 		// typedef const_reverse_iterator	reverse_iterator<const_iterator>	
 		
@@ -81,7 +81,9 @@ namespace ft {
 //**********************************************//
 
 // begin
+iterator begin(void) {return iterator(_raw_data);};
 // end
+iterator end(void) {return iterator(_raw_data + _current_len);};
 // rbegin
 // rend
 
