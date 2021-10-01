@@ -1,6 +1,6 @@
-#include "./sources/Vector.hpp"
-#include "./sources/Map.hpp"
-#include "./sources/Stack.hpp"
+#include "./sources/vector.hpp"
+#include "./sources/map.hpp"
+#include "./sources/stack.hpp"
 #include <vector>
 #include "test/test.hpp"
 

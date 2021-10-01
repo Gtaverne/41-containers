@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include "iterator.hpp"
 
 
 namespace ft {
@@ -59,7 +60,7 @@ namespace ft {
 
 		~vector()
 		{
-			// this->clear();
+			this->clear();
 			_alloc_type.deallocate(_raw_data, _max_capa);
 		}
 		
@@ -94,7 +95,7 @@ size_type size(void) const {return _current_len;};
 // max_size
 size_type max_size(void) const {return _alloc_type.max_size();};
 
-// resize  Voici qui est absolument degueulasse
+// resize  ATTENTION, NE DONNE PAS LES BONS RESULTATS
 void resize (size_type n, value_type val = value_type())
 {
 	//FONCTION A COMPLETER
@@ -115,15 +116,15 @@ size_type capacity() const {return _max_capa;};
 bool empty() const {return (_current_len == 0);};
 
 // reserve
-void reserve (size_type n);
+void reserve (size_type n)
 {
 	//FONCTION A COMPLETER
 	if (n > _max_capa)
 	{
-		size_type temp = _max_capa;
+		// size_type temp = _max_capa;
 		grow_raw(n - _max_capa);
-		for (size_type i = 0; i < n - temp; i++)
-			push_back(val);
+		// for (size_type i = 0; i < n - temp; i++)
+		// 	push_back(val);
 	}
 }
 
@@ -157,7 +158,6 @@ void push_back (const value_type &val)
 	_raw_data[_current_len] = val;
 	_current_len++;
 }
-// }
 
 // pop_back
 
