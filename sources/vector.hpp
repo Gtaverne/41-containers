@@ -20,9 +20,9 @@ namespace ft {
 		typedef	typename allocator_type::pointer	pointer;
 		typedef typename allocator_type::const_pointer	const_pointer;
 		
-		// ON VERRA LES ITERATORS PLUS TARD
+		// ITERATORS, to test thoroughly
 		typedef ft::my_iterator<value_type> iterator;
-		typedef ft::my_iterator<value_type const> const_iterator;//	a random access iterator to const value_type	
+		typedef ft::my_iterator<value_type const> const_iterator;
 		typedef ft::my_rev_iterator<value_type>	reverse_iterator;	
 		typedef ft::my_rev_iterator<value_type const> const_reverse_iterator;	
 		
@@ -96,7 +96,10 @@ iterator begin(void) {return iterator(_raw_data);};
 // end
 iterator end(void) {return iterator(_raw_data + _current_len);};
 // rbegin
+reverse_iterator rbegin(void) {return reverse_iterator(_raw_data);};
 // rend
+reverse_iterator rend(void) {return reverse_iterator(_raw_data + _current_len);};
+
 
 //**********************************************//
 // Capacity                                     //
@@ -145,10 +148,11 @@ void reserve (size_type n)
 // Element access                               //
 //**********************************************//
 
+// at
+	reference at( size_type pos ) {return _raw_data[pos];};
 // operator[]
     reference operator[] (size_type n) {return _raw_data[n];};
 	const_reference operator[] (size_type n) const {return _raw_data[n];};
-// at
 // front
 // back
 

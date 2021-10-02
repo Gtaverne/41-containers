@@ -30,6 +30,7 @@ int main ()
 	std::cout << "incremented " << *(--(vec.begin() + 5)) << std::endl;
 	std::cout << "end " << *vec.end() << std::endl;
 	std::cout << "[] operator " << vec.begin()[8] << std::endl;
+	std::cout << "at " << vec.at(8) << std::endl;
 	}
 
 //**********************************************//
@@ -59,6 +60,7 @@ std::cout << std::endl << "Here comes my tester " << std::endl;
 	std::cout << "incremented " << *(--(vec.begin() + 5)) << std::endl;
 	std::cout << "end " << *vec.end() << std::endl;
 	std::cout << "[] operator " << vec.begin()[8] << std::endl;
+	std::cout << "at " << vec.at(8) << std::endl;
 
 	}
 
