@@ -9,7 +9,7 @@ namespace ft
 	template<typename T>
 	class my_iterator 
 	{
-	protected:
+	public:
 		typedef T value_type;
 		typedef value_type *pointer_type;
 		typedef value_type &reference_type;
@@ -34,6 +34,11 @@ namespace ft
 		}
 
 		my_iterator(pointer_type tpe): ptr_iter(tpe) {};
+
+		operator my_iterator<value_type const>()
+		{
+			return my_iterator<value_type const>(ptr_iter);
+		}
 
 //**********************************************//
 // Logical comparison operators                 //
@@ -102,15 +107,14 @@ namespace ft
 
 	};
 
+//**********************************************//
+// Operator                                     //
+//**********************************************//
+	template <class T>
+	my_iterator<T> & operator+(typename my_iterator<T>::difference_type n, const my_iterator<T> &iter) {return iter + n;};
 
-
-
-
-
-
-
-
-
+	template <class T>
+	my_iterator<T> & operator-(typename my_iterator<T>::difference_type n, const my_iterator<T> &iter) {return iter - n;};
 }
 
 #endif

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "iterator.hpp"
-
+#include "reverse_iterator.hpp"
 
 namespace ft {
 	template <class T, class Alloc = std::allocator<T> >
@@ -23,8 +23,8 @@ namespace ft {
 		// ON VERRA LES ITERATORS PLUS TARD
 		typedef ft::my_iterator<value_type> iterator;
 		typedef ft::my_iterator<value_type const> const_iterator;//	a random access iterator to const value_type	
-		// typedef reverse_iterator	reverse_iterator<iterator>	
-		// typedef const_reverse_iterator	reverse_iterator<const_iterator>	
+		typedef ft::my_rev_iterator<value_type>	reverse_iterator;	
+		typedef ft::my_rev_iterator<value_type const> const_reverse_iterator;	
 		
 		typedef std::ptrdiff_t difference_type;
 		typedef size_t size_type;
