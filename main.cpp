@@ -3,12 +3,13 @@
 #include "./sources/stack.hpp"
 #include <vector>
 #include "test/test.hpp"
+#include <typeinfo>
 
 
 int main ()
 {
 //**********************************************//
-// Testeur de vecteur                           //
+// Testeur de vector                           //
 //**********************************************//
 	{
 	std::vector<int> vec;
@@ -27,6 +28,7 @@ int main ()
 
 	//iterators
 	std::cout << "begin " << *vec.begin() << std::endl;
+	std::cout << "== " << (vec.begin() == vec.begin()) << std::endl;
 	std::cout << "incremented " << *(--(vec.begin() + 5)) << std::endl;
 	std::cout << "end " << *vec.end() << std::endl;
 	std::cout << "[] operator " << vec.begin()[8] << std::endl;
@@ -57,6 +59,7 @@ std::cout << std::endl << "Here comes my tester " << std::endl;
 	//iterators
 	std::cout << "TEST OF ITERATORS" << std::endl;
 	std::cout << "begin " << *vec.begin() << std::endl;
+	std::cout << "== " << (vec.end() == vec.begin()) << std::endl;
 	std::cout << "incremented " << *(--(vec.begin() + 5)) << std::endl;
 	std::cout << "end " << *vec.end() << std::endl;
 	std::cout << "[] operator " << vec.begin()[8] << std::endl;

@@ -22,7 +22,7 @@ namespace ft
 
 	public:
 //**********************************************//
-// Canon and constructors                       //
+// Canon, constructors and casting              //
 //**********************************************//
 		my_iterator(void) : ptr_iter(NULL) {};
 		my_iterator(const my_iterator &src) {*this = src;};
@@ -35,7 +35,7 @@ namespace ft
 
 		my_iterator(pointer_type tpe): ptr_iter(tpe) {};
 
-		operator my_iterator<value_type const>()
+		operator my_iterator<value_type const>() const
 		{
 			return my_iterator<value_type const>(ptr_iter);
 		}
@@ -59,14 +59,17 @@ namespace ft
 		my_iterator<T> &operator+=(difference_type n)
 		{
 			ptr_iter += n;
-			return ptr_iter;
+			return *this;
 		}
 		my_iterator<T> &operator-=(difference_type n)
 		{
 			ptr_iter -= n;
-			return ptr_iter;
+			return *this;
 		}
-		friend my_iterator<T> &operator+(difference_type n, const my_iterator &rhs) {return rhs.ptr_iter + n;};
+		friend my_iterator<T> operator+(difference_type n, const my_iterator &rhs)
+		{
+			return rhs.ptr_iter + n;
+		}
 
 //**********************************************//
 // Incrementations                              //
@@ -115,6 +118,11 @@ namespace ft
 
 	template <class T>
 	my_iterator<T> & operator-(typename my_iterator<T>::difference_type n, const my_iterator<T> &iter) {return iter - n;};
+
+//**********************************************//
+// Comparison tool   DEFINE EQUAL HERE          //
+//**********************************************//
+		
 }
 
 #endif

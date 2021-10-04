@@ -35,6 +35,8 @@ namespace ft {
 		size_type _max_capa;
 		size_type _current_len;
 
+
+		//A private util function
 		void grow_raw(size_type to_add)
 		{
 			if ( _current_len + to_add <= _max_capa)
@@ -93,8 +95,11 @@ namespace ft {
 
 // begin
 iterator begin(void) {return iterator(_raw_data);};
+const_iterator begin(void) const {return const_iterator(_raw_data);};
 // end
 iterator end(void) {return iterator(_raw_data + _current_len);};
+const_iterator end(void) const {return const_iterator(_raw_data + _current_len);};
+
 // rbegin
 reverse_iterator rbegin(void) {return reverse_iterator(_raw_data);};
 // rend
@@ -150,11 +155,17 @@ void reserve (size_type n)
 
 // at
 	reference at( size_type pos ) {return _raw_data[pos];};
+	const_reference at( size_type pos ) const {return _raw_data[pos];};
+
 // operator[]
     reference operator[] (size_type n) {return _raw_data[n];};
 	const_reference operator[] (size_type n) const {return _raw_data[n];};
 // front
+	reference front(void) {return _raw_data[0];};
+	const_reference front (void) const {return _raw_data[0];};
 // back
+	reference back(void) {return _raw_data[_current_len];};
+	const_reference back (void) const {return _raw_data[_current_len];};
 
 //**********************************************//
 // Modifiers                                    //
@@ -211,10 +222,7 @@ void clear(void)
 
 // relational operators
 // swap
-};
-
-
-
+}
 
 
 #endif
