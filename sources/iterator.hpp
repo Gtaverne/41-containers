@@ -35,7 +35,7 @@ namespace ft
 
 		my_iterator(pointer_type tpe): ptr_iter(tpe) {};
 
-		operator my_iterator<value_type const>() const
+		operator my_iterator<const value_type>() const
 		{
 			return my_iterator<value_type const>(ptr_iter);
 		}
@@ -122,7 +122,9 @@ namespace ft
 //**********************************************//
 // Comparison tool   DEFINE EQUAL HERE          //
 //**********************************************//
-		
+	template <class T>
+	bool operator==(my_iterator<T>a, my_iterator<T const>b) {return a.ptr_iter == b.ptr_iter;};
+	
 }
 
 #endif

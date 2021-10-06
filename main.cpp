@@ -60,7 +60,7 @@ std::cout << std::endl << "Here comes my tester " << std::endl;
 	std::cout << "TEST OF ITERATORS" << std::endl;
 	std::cout << "begin " << *vec.begin() << std::endl;
 	std::cout << "== " << (vec.end() == vec.begin()) << std::endl;
-	std::cout << "incremented " << *(--(vec.begin() + 5)) << std::endl;
+	std::cout << "incremented + 5: " << *((vec.begin() + 0)) << std::endl;
 	std::cout << "end " << *vec.end() << std::endl;
 	std::cout << "[] operator " << vec.begin()[8] << std::endl;
 	std::cout << "at " << vec.at(8) << std::endl;

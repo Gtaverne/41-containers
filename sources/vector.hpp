@@ -99,7 +99,6 @@ const_iterator begin(void) const {return const_iterator(_raw_data);};
 // end
 iterator end(void) {return iterator(_raw_data + _current_len);};
 const_iterator end(void) const {return const_iterator(_raw_data + _current_len);};
-
 // rbegin
 reverse_iterator rbegin(void) {return reverse_iterator(_raw_data);};
 // rend
@@ -140,6 +139,8 @@ bool empty() const {return (_current_len == 0);};
 void reserve (size_type n)
 {
 	//FONCTION A COMPLETER
+	if (n > max_size())
+		throw std::length_error("n greater than vector::max_size()");
 	if (n > _max_capa)
 	{
 		// size_type temp = _max_capa;
@@ -171,7 +172,30 @@ void reserve (size_type n)
 // Modifiers                                    //
 //**********************************************//
 
-// assign
+// assign BIEN COMPRENDRE LE ENABLE IF
+template <class InputIterator>
+void assign (InputIterator first, InputIterator last)
+{
+	size_type n = std::distance(first, last);
+	if (n > _max_capa)
+		reserve(n);
+	for (size_type i = 0; i < _current_len; i++)
+		_alloc_type.destroy(&_raw_data[i]);
+	for (size_type i = 0; i < n; i++)
+		_alloc_type.construct(&_raw_data[i], *first++);
+	_current_len = n;
+}
+
+void assign (size_type n, const value_type& val)
+{
+	if (n > _max_capa)
+		reserve(n);
+	for (size_type i = 0; i < _current_len; i++)
+		_alloc_type.destroy(&_raw_data[i]);
+	for (size_type i = 0; i < n; i++)
+		_alloc_type.construct(&_raw_data[i], val);
+	_current_len = n;
+}
 
 // push_back
 void push_back (const value_type &val)
@@ -188,8 +212,19 @@ void push_back (const value_type &val)
 }
 
 // pop_back
+void pop_back(void)
+{
+	_alloc_type.destroy(&_raw_data[_current_len - 1]);
+	_current_len--;
+}
 
 // insert
+iterator insert(iterator pos, const T& value );
+
+void insert(iterator pos, size_type count, const T& value );
+
+template< class InputIt >
+void insert(iterator pos, InputIt first, InputIt last );
 
 // erase
 
