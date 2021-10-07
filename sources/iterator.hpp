@@ -121,27 +121,25 @@ namespace ft
 //**********************************************//
 // Comparison tool   DEFINE EQUAL HERE          //
 //**********************************************//
-	template <class T>
-	bool operator==(my_iterator<T>a, my_iterator<T const>b) {return a.ptr_iter == b.ptr_iter;};
-	
+
+template <typename Iter1, typename Iter2>
+bool operator==(const my_iterator<Iter1>& lhs, const my_iterator<Iter2>& rhs) {return lhs.getIter() == rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator!=(const my_iterator<Iter1>& lhs, const my_iterator<Iter2>& rhs) {return lhs.getIter() != rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator<(const my_iterator<Iter1>& lhs, const my_iterator<Iter2>& rhs) {return lhs.getIter() < rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator>(const my_iterator<Iter1>& lhs, const my_iterator<Iter2>& rhs) {return lhs.getIter() > rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator<=(const my_iterator<Iter1>& lhs, const my_iterator<Iter2>& rhs) {return lhs.getIter() <= rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator>=(const my_iterator<Iter1>& lhs, const my_iterator<Iter2>& rhs) {return lhs.getIter() >= rhs.getIter();};
 }
 
-template <typename Iter1, typename Iter2>
-bool operator==(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() == rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator!=(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() != rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator<(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() < rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator>(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() > rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator<=(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() <= rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator>=(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() >= rhs.getIter();};
 
 #endif
