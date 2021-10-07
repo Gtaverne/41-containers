@@ -110,7 +110,7 @@ namespace ft
 	};
 
 //**********************************************//
-// Operator                                     //
+// Operator in the case 'int +- iter'           //
 //**********************************************//
 	template <class T>
 	my_iterator<T> & operator+(typename my_iterator<T>::difference_type n, const my_iterator<T> &iter) {return iter + n;};
