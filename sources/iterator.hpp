@@ -18,9 +18,8 @@ namespace ft
 	
 	private:
 		pointer_type ptr_iter;
-	
-
 	public:
+		pointer_type getIter(void) const {return ptr_iter;};
 //**********************************************//
 // Canon, constructors and casting              //
 //**********************************************//
@@ -126,5 +125,23 @@ namespace ft
 	bool operator==(my_iterator<T>a, my_iterator<T const>b) {return a.ptr_iter == b.ptr_iter;};
 	
 }
+
+template <typename Iter1, typename Iter2>
+bool operator==(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() == rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator!=(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() != rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator<(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() < rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator>(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() > rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator<=(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() <= rhs.getIter();};
+
+template <typename Iter1, typename Iter2>
+bool operator>=(const ft::my_iterator<Iter1>& lhs, const ft::my_iterator<Iter2>& rhs) {return lhs.getIter() >= rhs.getIter();};
 
 #endif

@@ -46,7 +46,10 @@ std::cout << std::endl << "Here comes my tester " << std::endl;
 	std::cout << "Initial empty " << vec.empty() << std::endl;
 	for (int i = 0; i < 100 ; i++)
 		vec.push_back(i * 5);
-	std::cout << "vec[33]: " << vec[33] << std::endl;
+	vec[0] = 42;
+	ft::vector<int>::const_iterator bob = vec.begin();
+	std::cout << "vec[]: " << vec[0] << std::endl;
+	std::cout << *bob << std::endl;
 
 	std::cout << "size " << vec.size() << std::endl;
 	std::cout << "max_size " << vec.max_size() << std::endl;
