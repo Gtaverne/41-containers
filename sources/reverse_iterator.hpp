@@ -22,13 +22,13 @@ namespace ft
 		iterator_type _raw_iter;
 
 	public:
-		pointer_type getIter(void) const {return _raw_iter;};
-		
+
 //**********************************************//
 // Canon, constructors and casting              //
 //**********************************************//
 		my_rev_iterator(void) : _raw_iter(NULL) {};
-		my_rev_iterator(const my_rev_iterator &src) {*this = src;};
+		explicit my_rev_iterator(iterator_type it): _raw_iter(it) {};
+		my_rev_iterator(const my_rev_iterator<Iter>& src): _raw_iter(src._raw_iter) {};
 		virtual ~my_rev_iterator(void) {};
 		my_rev_iterator & operator=(my_rev_iterator const & rhs) 
 		{
@@ -36,7 +36,6 @@ namespace ft
 			return *this;
 		}
 
-		explicit my_rev_iterator(iterator_type it): _raw_iter(it) {};
 
 		operator my_rev_iterator<my_iterator<value_type const> >() const
 		{
@@ -50,50 +49,45 @@ namespace ft
 	
 
 //**********************************************//
-// Logical comparison operators                 //
-//**********************************************//
-		bool operator<(const my_rev_iterator &rhs) const {return _raw_iter < rhs._raw_iter;};
-		bool operator>(const my_rev_iterator &rhs) const {return _raw_iter > rhs._raw_iter;};
-		bool operator<=(const my_rev_iterator &rhs) const {return _raw_iter <= rhs._raw_iter;};
-		bool operator>=(const my_rev_iterator &rhs) const {return _raw_iter >= rhs._raw_iter;};
-		bool operator==(const my_rev_iterator &rhs) const {return _raw_iter == rhs._raw_iter;};
-		bool operator!=(const my_rev_iterator &rhs) const {return _raw_iter != rhs._raw_iter;};
-
-//**********************************************//
 // Basic + and -                                //
 //**********************************************//
-		difference_type operator-(const my_rev_iterator &rhs) const {return _raw_iter - rhs._raw_iter;};
 		my_rev_iterator operator+(difference_type n) const
 		{
-			_raw_iter -= n;
-			return *this;
+			my_rev_iterator tmp = *this;
+			tmp += n; //+= permet deja de gerer le changement de signe
+			return tmp;
 		};
-		my_rev_iterator operator-(difference_type n) const {return _raw_iter - n;};
+		difference_type operator-(const my_rev_iterator &rhs) const
+		{
+			return _raw_iter - rhs._raw_iter;
+		}
+		my_rev_iterator operator-(difference_type n) 
+		{
+			my_rev_iterator tmp = *this;
+			tmp -= n; //-= permet deja de gerer le changement de signe
+			return tmp;
+		};
 		my_rev_iterator &operator+=(difference_type n)
 		{
-			_raw_iter += n;
+			_raw_iter -= n;
 			return *this;
 		}
 		my_rev_iterator &operator-=(difference_type n)
 		{
-			_raw_iter -= n;
+			_raw_iter += n;
 			return *this;
 		}
 		friend my_rev_iterator operator+(difference_type n, const my_rev_iterator &rhs)
 		{
-			return rhs._raw_iter + n;
+			my_rev_iterator tmp = rhs;
+			tmp += n; //+= permet deja de gerer le changement de signe
+			return tmp;
 		}
 
 //**********************************************//
 // Incrementations                              //
 //**********************************************//
 		my_rev_iterator &operator++(void)
-		{
-			++_raw_iter;
-			return *this;
-		}
-
-		my_rev_iterator &operator--(void)
 		{
 			--_raw_iter;
 			return *this;
@@ -102,14 +96,20 @@ namespace ft
 		my_rev_iterator operator++(int)
 		{
 			my_rev_iterator tmp(*this);
-			++_raw_iter;
+			--_raw_iter;
 			return (tmp);
+		}
+
+		my_rev_iterator &operator--(void)
+		{
+			++_raw_iter;
+			return *this;
 		}
 
 		my_rev_iterator operator--(int)
 		{
 			my_rev_iterator tmp(*this);
-			--_raw_iter;
+			++_raw_iter;
 			return (tmp);
 		}
 
@@ -117,9 +117,13 @@ namespace ft
 // Basic manips                                 //
 //**********************************************//
 
-		reference_type operator*(void) const	{return (*_raw_iter);};
-		pointer_type operator->(void) const {return (_raw_iter);};
-		reference_type operator[](difference_type n) {return (_raw_iter[n]);};
+		reference_type operator*(void) const
+		{
+			Iter tmp = _raw_iter;
+			return (*(--tmp));
+		}
+		pointer_type operator->(void) const {return &(operator*());};
+		reference_type operator[](difference_type n) const{return (*(_raw_iter - n - 1));};
 		iterator_type base() const {return (_raw_iter);};
 
 	};
@@ -128,32 +132,29 @@ namespace ft
 // Operator                                     //
 //**********************************************//
 	template <class T>
-	my_rev_iterator<T> & operator+(typename my_rev_iterator<T>::difference_type n, const my_rev_iterator<T> &iter) {return iter + n;};
+	my_rev_iterator<T> & operator+(typename my_rev_iterator<T>::difference_type n, const my_rev_iterator<T> &iter) {return (iter + n);};
 
 	template <class T>
 	my_rev_iterator<T> & operator-(typename my_rev_iterator<T>::difference_type n, const my_rev_iterator<T> &iter) {return iter - n;};
 
-//**********************************************//
-// Comparison tool   DEFINE EQUAL HERE          //
-//**********************************************//
+	template <typename Iter1, typename Iter2>
+	bool operator==(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() == rhs.base();};
+
+	template <typename Iter1, typename Iter2>
+	bool operator!=(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() != rhs.base();};
+
+	template <typename Iter1, typename Iter2>
+	bool operator<(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() < rhs.base();};
+
+	template <typename Iter1, typename Iter2>
+	bool operator>(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() > rhs.base();};
+
+	template <typename Iter1, typename Iter2>
+	bool operator<=(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() <= rhs.base();};
+
+	template <typename Iter1, typename Iter2>
+	bool operator>=(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() >= rhs.base();};
 }
 
-template <typename Iter1, typename Iter2>
-bool operator==(const ft::my_rev_iterator<Iter1>& lhs, const ft::my_rev_iterator<Iter2>& rhs) {return lhs.getIter() == rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator!=(const ft::my_rev_iterator<Iter1>& lhs, const ft::my_rev_iterator<Iter2>& rhs) {return lhs.getIter() != rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator<(const ft::my_rev_iterator<Iter1>& lhs, const ft::my_rev_iterator<Iter2>& rhs) {return lhs.getIter() < rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator>(const ft::my_rev_iterator<Iter1>& lhs, const ft::my_rev_iterator<Iter2>& rhs) {return lhs.getIter() > rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator<=(const ft::my_rev_iterator<Iter1>& lhs, const ft::my_rev_iterator<Iter2>& rhs) {return lhs.getIter() <= rhs.getIter();};
-
-template <typename Iter1, typename Iter2>
-bool operator>=(const ft::my_rev_iterator<Iter1>& lhs, const ft::my_rev_iterator<Iter2>& rhs) {return lhs.getIter() >= rhs.getIter();};
 
 #endif
