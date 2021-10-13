@@ -37,20 +37,15 @@ namespace ft {
 
 
 		//A private util function
-		void grow_raw(size_type to_add)
+		void _grow_raw(void) 
 		{
-			if ( _current_len + to_add <= _max_capa)
-				return ;
 			if (_max_capa == 0)
-				_max_capa = 1;
-			while ( to_add + _current_len > _max_capa)
-				_max_capa *= 2;
-			pointer res = _alloc_type.allocate(_max_capa);
-			for (size_type i = 0; i < _current_len; i++)
-				res[i] = _raw_data[i];
-			delete[] _raw_data;
-			_raw_data = res;
+				reserve(1);
+			else
+				reserve(_max_capa * 2);
 		}
+
+		// void _grow_raw(size_type to_add) {reserve(_max_capa + to_add);};
 
 	public:
 //**********************************************//
@@ -115,16 +110,22 @@ size_type size(void) const {return _current_len;};
 // max_size
 size_type max_size(void) const {return _alloc_type.max_size();};
 
-// resize  ATTENTION, NE DONNE PAS LES BONS RESULTATS
+// resize
 void resize (size_type n, value_type val = value_type())
 {
-	//FONCTION A COMPLETER
 	if (n > _max_capa)
+		reserve(n);
+	if (n > _current_len)
 	{
-		size_type temp = _max_capa;
-		grow_raw(n - _max_capa);
-		for (size_type i = 0; i < n - temp; i++)
-			push_back(val);
+		for (size_type i = _current_len; i < n; i++)
+			_alloc_type.construct(&_raw_data[i], val);
+		_current_len = n;
+	}
+	else if (n < _current_len)
+	{
+		for (size_type i = n; i < _current_len; i++)
+			_alloc_type.destroy(&_raw_data[i]);
+		_current_len = n;
 	}
 }
 
@@ -138,15 +139,22 @@ bool empty() const {return (_current_len == 0);};
 // reserve
 void reserve (size_type n)
 {
-	//FONCTION A COMPLETER
 	if (n > max_size())
 		throw std::length_error("n greater than vector::max_size()");
 	if (n > _max_capa)
 	{
-		// size_type temp = _max_capa;
-		grow_raw(n - _max_capa);
-		// for (size_type i = 0; i < n - temp; i++)
-		// 	push_back(val);
+		value_type *tmp = _alloc_type.allocate(n);
+
+		for (size_type i = 0; i < _current_len; i++)
+		{
+			_alloc_type.construct(&tmp[i], _raw_data[i]);
+			_alloc_type.destroy(&_raw_data[i]);
+		}
+
+		if (_raw_data)
+			_alloc_type.deallocate(_raw_data, _max_capa);
+		_max_capa = n;
+		_raw_data = tmp;
 	}
 }
 
@@ -157,7 +165,6 @@ void reserve (size_type n)
 // at
 	reference at( size_type pos ) {return _raw_data[pos];};
 	const_reference at( size_type pos ) const {return _raw_data[pos];};
-
 // operator[]
     reference operator[] (size_type n) {return _raw_data[n];};
 	const_reference operator[] (size_type n) const {return _raw_data[n];};
@@ -201,13 +208,8 @@ void assign (size_type n, const value_type& val)
 void push_back (const value_type &val)
 {
 	if (_max_capa == _current_len)
-	{
-		if (_current_len == 0)
-			grow_raw(1);
-		else
-			grow_raw (2 * _current_len);
-	}
-	_raw_data[_current_len] = val;
+		_grow_raw();
+	_alloc_type.construct(&_raw_data[_current_len], val);
 	_current_len++;
 }
 
@@ -233,8 +235,8 @@ void insert(iterator pos, InputIt first, InputIt last );
 // clear
 void clear(void)
 {
-	// for (iterator it = begin(); i != end(); it++)
-	// 	_raw_data.destroy(&(*it));
+	for (size_type i = 0; i < _current_len; i++)
+		_alloc_type.destroy(&_raw_data[i]);
 	_max_capa = 0;
 }
 
@@ -243,11 +245,7 @@ void clear(void)
 //**********************************************//
 
 // get_allocator
-
-
-
-
-
+allocator_type get_allocator() const {return _alloc_type;}
 
 	};
 
