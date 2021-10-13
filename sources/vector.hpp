@@ -23,8 +23,8 @@ namespace ft {
 		// ITERATORS, to test thoroughly
 		typedef ft::my_iterator<value_type> iterator;
 		typedef ft::my_iterator<value_type const> const_iterator;
-		typedef ft::my_rev_iterator<value_type>	reverse_iterator;	
-		typedef ft::my_rev_iterator<value_type const> const_reverse_iterator;	
+		typedef ft::my_rev_iterator<iterator>	reverse_iterator;	
+		typedef ft::my_rev_iterator<iterator> const_reverse_iterator;	
 		
 		typedef std::ptrdiff_t difference_type;
 		typedef size_t size_type;
@@ -61,26 +61,44 @@ namespace ft {
 			_current_len = n;
 			_max_capa = n;
 			for (size_type i = 0; i < _current_len; i++)
-			{
 				_alloc_type.construct(&_raw_data[i], val);
+		}
+
+		vector(const vector &rhs) : _raw_data(NULL), _alloc_type(rhs._alloc_type), _max_capa(rhs._max_capa), _current_len(rhs._current_len)
+		{
+			if (rhs._raw_data)
+			{
+				_raw_data = _alloc_type.allocate(_max_capa);
+				for (size_type i = 0; i < _current_len; i++)
+					_alloc_type.construct(&_raw_data[i], rhs._raw_data[i]);
 			}
 		}
 
 		~vector()
 		{
-			this->clear();
-			_alloc_type.deallocate(_raw_data, _max_capa);
+			clear();
+			if (_raw_data)
+				_alloc_type.deallocate(_raw_data, _max_capa);
 		}
 		
 		vector & operator=(vector const & rhs)
 		{
 			if (this == &rhs)
 				return *this;
-			_max_capa = rhs._max_capa;
+			clear();
+			if (_max_capa < rhs._current_len)
+				reserve(rhs._current_len);
 			_current_len = rhs._current_len;
-			_alloc_type.deallocate(_raw_data, _max_capa);
-			//we must make a deep copy
-			_raw_data = rhs._raw_data;
+			if (_raw_data)
+				_alloc_type.deallocate(_raw_data, _max_capa);
+			if (rhs._raw_data)
+			{
+				_raw_data = _alloc_type.allocate(_max_capa);
+				for (size_type i = 0; i < _current_len; i++)
+					_alloc_type.construct(&_raw_data[i], rhs._raw_data[i]);
+			}
+			else
+				_raw_data = NULL;
 			return *this;
 		}
 
@@ -121,7 +139,7 @@ void resize (size_type n, value_type val = value_type())
 			_alloc_type.construct(&_raw_data[i], val);
 		_current_len = n;
 	}
-	else if (n < _current_len)
+	else
 	{
 		for (size_type i = n; i < _current_len; i++)
 			_alloc_type.destroy(&_raw_data[i]);
@@ -163,8 +181,18 @@ void reserve (size_type n)
 //**********************************************//
 
 // at
-	reference at( size_type pos ) {return _raw_data[pos];};
-	const_reference at( size_type pos ) const {return _raw_data[pos];};
+	reference at( size_type pos )
+	{
+		if (pos >= _current_len)
+			throw (std::out_of_range("out of range"));
+		return _raw_data[pos];
+	}
+	const_reference at( size_type pos ) const
+	{
+		if (pos >= _current_len)
+			throw (std::out_of_range("out of range"));
+		return _raw_data[pos];
+	}
 // operator[]
     reference operator[] (size_type n) {return _raw_data[n];};
 	const_reference operator[] (size_type n) const {return _raw_data[n];};
@@ -172,8 +200,8 @@ void reserve (size_type n)
 	reference front(void) {return _raw_data[0];};
 	const_reference front (void) const {return _raw_data[0];};
 // back
-	reference back(void) {return _raw_data[_current_len];};
-	const_reference back (void) const {return _raw_data[_current_len];};
+	reference back(void) {return _raw_data[_current_len - 1];};
+	const_reference back (void) const {return _raw_data[_current_len - 1];};
 
 //**********************************************//
 // Modifiers                                    //
@@ -235,9 +263,8 @@ void insert(iterator pos, InputIt first, InputIt last );
 // clear
 void clear(void)
 {
-	for (size_type i = 0; i < _current_len; i++)
-		_alloc_type.destroy(&_raw_data[i]);
-	_max_capa = 0;
+	while (_current_len > 0)
+		pop_back();
 }
 
 //**********************************************//

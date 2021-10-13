@@ -3,23 +3,24 @@
 
 #include <cstddef>
 #include <iostream>
+#include <iterator>
 
 namespace ft
 {
-	template<typename T>
+	template<class T>
 	class my_iterator 
 	{
 	public:
 		typedef T value_type;
-		typedef value_type *pointer_type;
-		typedef value_type &reference_type;
+		typedef value_type *pointer;
+		typedef value_type &reference;
 		typedef ptrdiff_t difference_type;
-		typedef std::random_access_iterator_tag my_iter_category;
+		typedef std::random_access_iterator_tag iterator_category;
 	
 	private:
-		pointer_type ptr_iter;
+		pointer ptr_iter;
 	public:
-		pointer_type getIter(void) const {return ptr_iter;};
+		pointer getIter(void) const {return ptr_iter;};
 //**********************************************//
 // Canon, constructors and casting              //
 //**********************************************//
@@ -32,7 +33,7 @@ namespace ft
 			return *this;
 		}
 
-		my_iterator(pointer_type tpe): ptr_iter(tpe) {};
+		my_iterator(pointer tpe): ptr_iter(tpe) {};
 
 		operator my_iterator<const value_type>() const
 		{
@@ -103,9 +104,9 @@ namespace ft
 // Basic manips                                 //
 //**********************************************//
 
-		reference_type operator*(void) const	{return (*ptr_iter);};
-		pointer_type operator->(void) const {return (ptr_iter);};
-		reference_type operator[](difference_type n) {return (ptr_iter[n]);};
+		reference operator*(void) const	{return (*ptr_iter);};
+		pointer operator->(void) const {return (ptr_iter);};
+		reference operator[](difference_type n) {return (ptr_iter[n]);};
 
 	};
 
@@ -140,6 +141,5 @@ bool operator<=(const my_iterator<Iter1>& lhs, const my_iterator<Iter2>& rhs) {r
 template <typename Iter1, typename Iter2>
 bool operator>=(const my_iterator<Iter1>& lhs, const my_iterator<Iter2>& rhs) {return lhs.getIter() >= rhs.getIter();};
 }
-
 
 #endif

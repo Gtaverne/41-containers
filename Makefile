@@ -1,7 +1,6 @@
 NAME	=	containers
 CC		=	clang++
-HEADER	=	sources/Map.hpp sources/Stack.hpp sources/Vector.hpp \
-			test/test.hpp
+HEADER	=	sources/*
 OBJDIR	=	obj
 SRC		=	main.cpp
 

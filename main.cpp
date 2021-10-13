@@ -22,7 +22,7 @@ void testerIntVec(anyintvector vec)
 
 	std::cout << "capacity " << vec.capacity() << std::endl;
 	vec.resize(10);
-	std::cout << "Capacity after resize " << vec.capacity() << std::endl;
+	std::cout << "Capacity ainter resize " << vec.capacity() << std::endl;
 	std::cout << "empty " << vec.empty() << std::endl;
 
 	//iterators
@@ -33,6 +33,7 @@ void testerIntVec(anyintvector vec)
 	std::cout << "end " << *vec.end() << std::endl;
 	std::cout << "[] operator " << vec.begin()[8] << std::endl;
 	std::cout << "at " << vec.at(8) << std::endl;
+
 }
 
 int main ()
@@ -47,7 +48,7 @@ std::cout << std::endl << "***Here comes the base case***" << std::endl;
 	}
 
 //**********************************************//
-// Testeur de ft::vector                        //
+// Testeur de int::vector                        //
 //**********************************************//
 std::cout << std::endl << "***Here comes my tester***" << std::endl;
 
