@@ -20,7 +20,6 @@ namespace ft {
 		typedef	typename allocator_type::pointer	pointer;
 		typedef typename allocator_type::const_pointer	const_pointer;
 		
-		// ITERATORS, to test thoroughly
 		typedef ft::my_iterator<value_type> iterator;
 		typedef ft::my_iterator<value_type const> const_iterator;
 		typedef ft::my_rev_iterator<iterator>	reverse_iterator;	
@@ -113,9 +112,9 @@ const_iterator begin(void) const {return const_iterator(_raw_data);};
 iterator end(void) {return iterator(_raw_data + _current_len);};
 const_iterator end(void) const {return const_iterator(_raw_data + _current_len);};
 // rbegin
-reverse_iterator rbegin(void) {return reverse_iterator(_raw_data);};
+reverse_iterator rbegin(void) {return reverse_iterator(_raw_data + _current_len);};
 // rend
-reverse_iterator rend(void) {return reverse_iterator(_raw_data + _current_len);};
+reverse_iterator rend(void) {return reverse_iterator(_raw_data);};
 
 
 //**********************************************//
@@ -281,6 +280,44 @@ allocator_type get_allocator() const {return _alloc_type;}
 //**********************************************//
 
 // relational operators
+template< class T, class Alloc >
+bool operator==(const vector<T, Alloc> &vec1, const vector<T, Alloc> &vec2)
+{
+	if (vec1.size() != vec2.size())
+		return false;
+	return (equal(vec1.begin(), vec1.end(), vec2.begin()));
+}
+
+template< class T, class Alloc >
+bool operator!=(const vector<T, Alloc> &vec1, const vector<T, Alloc> &vec2)
+{
+	return (!(vec1 == vec2));
+}
+
+template< class T, class Alloc >
+bool operator<(const vector<T, Alloc> &vec1, const vector<T, Alloc> &vec2)
+{
+	return (lexicographical_compare(vec1.begin(), vec1.end(), vec2.begin(), vec2.end()));
+}
+
+template< class T, class Alloc >
+bool operator<=(const vector<T, Alloc> &vec1, const vector<T, Alloc> &vec2)
+{
+	return (vec1 == vec2 || vec1 < vec2);
+}
+
+template< class T, class Alloc >
+bool operator>(const vector<T, Alloc> &vec1, const vector<T, Alloc> &vec2)
+{
+	return (!(vec1 <= vec2));
+}
+
+template< class T, class Alloc >
+bool operator>=(const vector<T, Alloc> &vec1, const vector<T, Alloc> &vec2)
+{
+	return (vec1 == vec2 || vec1 > vec2);
+}
+
 // swap
 }
 
