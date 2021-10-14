@@ -36,6 +36,24 @@ void testerIntVec(anyintvector vec)
 
 }
 
+template <class stringvec>
+void testerStrtVec(stringvec vec)
+{
+	std::cout << "Initial capacity " << vec.capacity() << std::endl;
+	std::cout << "Initial empty " << vec.empty() << std::endl;
+	for (int i = 0; i < 100 ; i++)
+		vec.push_back("bob");
+	vec[11] = "maurice";
+	typename stringvec::iterator bob = vec.begin() + 10;
+	std::cout << "vec[]: " << vec[0] << std::endl;
+	std::cout << "size " << vec.size() << std::endl;
+	std::cout << *bob << std::endl;
+	vec.erase(bob);
+	std::cout << "size after erase " << vec.size() << std::endl;
+	std::cout << *bob << std::endl;
+
+}
+
 int main ()
 {
 //**********************************************//
@@ -57,5 +75,10 @@ std::cout << std::endl << "***Here comes my tester***" << std::endl;
 	testerIntVec(vec);
 	}
 
+	{
+	ft::vector<std::string>vec;
+
+	testerStrtVec(vec);
+	}
 	
 }

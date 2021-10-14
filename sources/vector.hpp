@@ -256,8 +256,40 @@ template< class InputIt >
 void insert(iterator pos, InputIt first, InputIt last );
 
 // erase
+iterator erase (iterator position) {return (erase(position, position +1));};
+
+iterator erase(iterator first, iterator last)
+{
+	iterator res = first;
+	iterator end = this->end();
+	size_type i = &*last - &*first;
+
+	while (last != end)
+	{
+		*first = *last;
+		first++;
+		last++;
+	}
+	while (i-- > 0)
+		pop_back();
+	return (res);
+}
 
 // swap
+void swap(vector &rhs)
+{
+	pointer raw_data_tmp = rhs._raw_data;
+	size_type capa_tmp = rhs._max_capa;
+	size_type size_tmp = rhs._current_len;
+
+	rhs._raw_data = this->_raw_data;
+	rhs._max_capa = this->_max_capa;
+	rhs._current_len = this->_current_len;
+
+	this->_raw_data = raw_data_tmp;
+	this->_max_capa = capa_tmp;
+	this->_current_len = size_tmp;	
+}
 
 // clear
 void clear(void)
@@ -319,6 +351,10 @@ bool operator>=(const vector<T, Alloc> &vec1, const vector<T, Alloc> &vec2)
 }
 
 // swap
+template <class T, class Alloc>
+void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
+{x.swap(y);};
+
 }
 
 

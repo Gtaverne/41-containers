@@ -36,7 +36,6 @@ namespace ft
 			return *this;
 		}
 
-
 		operator my_rev_iterator<my_iterator<value_type const> >() const
 		{
 			return my_rev_iterator<my_iterator<value_type const > > (_raw_iter);
