@@ -7,7 +7,6 @@
 
 namespace ft {
 	template <class T, class Alloc = std::allocator<T> >
-
 	class vector
 	{
 	public:
@@ -62,6 +61,11 @@ namespace ft {
 			for (size_type i = 0; i < _current_len; i++)
 				_alloc_type.construct(&_raw_data[i], val);
 		}
+
+		template <class InputIterator>
+        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), 
+		typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL) : _raw_data(NULL), _alloc_type(alloc), _max_capa(0), _current_len(0)
+		{assign(first, last);}
 
 		vector(const vector &rhs) : _raw_data(NULL), _alloc_type(rhs._alloc_type), _max_capa(rhs._max_capa), _current_len(rhs._current_len)
 		{
@@ -208,7 +212,7 @@ void reserve (size_type n)
 
 // assign BIEN COMPRENDRE LE ENABLE IF
 template <class InputIterator>
-void assign (InputIterator first, InputIterator last)
+void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 {
 	size_type n = std::distance(first, last);
 	if (n > _max_capa)
@@ -248,12 +252,45 @@ void pop_back(void)
 }
 
 // insert
-iterator insert(iterator pos, const T& value );
+iterator insert(iterator pos, const T& value )
+{
+	size_type l_start = &*pos - &*begin();
+	insert(pos, 1, value);
+	return (begin() + l_start);
+}
 
-void insert(iterator pos, size_type count, const T& value );
+void insert(iterator pos, size_type n, const T& value )
+{
+	size_type l_start = &*pos - &*begin();
+	size_type l_end = &*end() - &*pos;
+
+	if (_current_len + n > _max_capa)
+		reserve(_current_len + n);
+	for (size_type i = 0; i < l_end; i++)
+		_alloc_type.construct(&_raw_data[_current_len - 1 + n - i], _raw_data[_current_len - 1 - i]);
+	for (size_type i = 0; i < n; i++)
+		_raw_data[l_start + i] = value;
+	_current_len += n;
+}
 
 template< class InputIt >
-void insert(iterator pos, InputIt first, InputIt last );
+void insert(iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = NULL)
+{
+	size_type n = std::distance(first, last);
+	size_type l_start = &*pos - &*begin();
+	size_type l_end = &*end() - &*pos;
+
+	if (_current_len + n > _max_capa)
+		reserve(_current_len + n);
+	for (size_type i = 0; i < l_end; i++)
+		_alloc_type.construct(&_raw_data[_current_len - 1 + n - i], _raw_data[_current_len - 1 - i]);
+
+	while (first != last)
+	{
+		*((begin() + l_start++)) = *(first++);
+	}
+	_current_len += n;
+}
 
 // erase
 iterator erase (iterator position) {return (erase(position, position +1));};
