@@ -19,10 +19,10 @@ namespace ft {
 		typedef	typename allocator_type::pointer	pointer;
 		typedef typename allocator_type::const_pointer	const_pointer;
 		
-		typedef ft::my_iterator<value_type> iterator;
-		typedef ft::my_iterator<value_type const> const_iterator;
-		typedef ft::my_rev_iterator<iterator>	reverse_iterator;	
-		typedef ft::my_rev_iterator<const_iterator> const_reverse_iterator;	
+		typedef my_iterator<value_type> iterator;
+		typedef my_iterator<value_type const> const_iterator;
+		typedef my_rev_iterator<iterator>	reverse_iterator;	
+		typedef my_rev_iterator<const_iterator> const_reverse_iterator;	
 		
 		typedef std::ptrdiff_t difference_type;
 		typedef size_t size_type;
@@ -117,8 +117,10 @@ iterator end(void) {return iterator(_raw_data + _current_len);};
 const_iterator end(void) const {return const_iterator(_raw_data + _current_len);};
 // rbegin
 reverse_iterator rbegin(void) {return reverse_iterator(_raw_data + _current_len);};
+const_reverse_iterator rbegin(void) const {return const_reverse_iterator(_raw_data + _current_len);};
 // rend
 reverse_iterator rend(void) {return reverse_iterator(_raw_data);};
+const_reverse_iterator rend(void) const {return const_reverse_iterator(_raw_data);};
 
 
 //**********************************************//
@@ -393,6 +395,5 @@ void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
 {x.swap(y);};
 
 }
-
 
 #endif
