@@ -183,6 +183,13 @@ struct is_integral<unsigned long int>
 template <>
 struct is_integral<unsigned long long int>
 {const static bool value = true;};
+
+
+template <class T>
+struct less 
+{
+bool operator() (const T& x, const T& y) const {return x<y;}
+};
 }
 
 #endif

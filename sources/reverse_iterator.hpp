@@ -3,7 +3,7 @@
 
 
 #include "iterator.hpp"
-#include "iterator_utils.hpp"
+#include "utils.hpp"
 
 namespace ft
 {
@@ -28,7 +28,9 @@ namespace ft
 //**********************************************//
 		my_rev_iterator(void) : _raw_iter(NULL) {};
 		explicit my_rev_iterator(iterator_type it): _raw_iter(it) {};
-		my_rev_iterator(const my_rev_iterator<Iter>& src): _raw_iter(src._raw_iter) {};
+		template< class anyIter>
+		my_rev_iterator(const my_rev_iterator<anyIter>& src): _raw_iter(src.base()) {};
+
 		virtual ~my_rev_iterator(void) {};
 		my_rev_iterator & operator=(my_rev_iterator const & rhs) 
 		{

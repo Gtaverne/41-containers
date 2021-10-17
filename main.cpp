@@ -2,83 +2,61 @@
 #include "./sources/map.hpp"
 #include "./sources/stack.hpp"
 #include <vector>
-#include "test/test.hpp"
+#include <stack>
+#include "mytestes.hpp"
 #include <typeinfo>
 
-template <class anyintvector>
-void testerIntVec(anyintvector vec)
-{
-	std::cout << "Initial capacity " << vec.capacity() << std::endl;
-	std::cout << "Initial empty " << vec.empty() << std::endl;
-	for (int i = 0; i < 100 ; i++)
-		vec.push_back(i * 5);
-	vec[0] = 42;
-	typename anyintvector::const_iterator bob = vec.begin();
-	std::cout << "vec[]: " << vec[0] << std::endl;
-	std::cout << *bob << std::endl;
-
-	std::cout << "size " << vec.size() << std::endl;
-	std::cout << "max_size " << vec.max_size() << std::endl;
-
-	std::cout << "capacity " << vec.capacity() << std::endl;
-	vec.resize(10);
-	std::cout << "Capacity ainter resize " << vec.capacity() << std::endl;
-	std::cout << "empty " << vec.empty() << std::endl;
-
-	//iterators
-	std::cout << "TEST OF ITERATORS" << std::endl;
-	std::cout << "begin " << *vec.begin() << std::endl;
-	std::cout << "== " << (vec.end() == vec.begin()) << std::endl;
-	std::cout << "incremented + 5: " << *((vec.begin() + 0)) << std::endl;
-	std::cout << "end " << *vec.end() << std::endl;
-	std::cout << "[] operator " << vec.begin()[8] << std::endl;
-	std::cout << "at " << vec.at(8) << std::endl;
-
-}
-
-template <class stringvec>
-void testerStrtVec(stringvec vec)
-{
-	std::cout << "Initial capacity " << vec.capacity() << std::endl;
-	std::cout << "Initial empty " << vec.empty() << std::endl;
-	for (int i = 0; i < 100 ; i++)
-		vec.push_back("bob");
-	vec[11] = "maurice";
-	typename stringvec::iterator bob = vec.begin() + 10;
-	std::cout << "vec[]: " << vec[0] << std::endl;
-	std::cout << "size " << vec.size() << std::endl;
-	std::cout << *bob << std::endl;
-	vec.erase(bob);
-	std::cout << "size after erase " << vec.size() << std::endl;
-	std::cout << *bob << std::endl;
-
-}
 
 int main ()
 {
-//**********************************************//
-// Testeur de vector                           //
-//**********************************************//
-std::cout << std::endl << "***Here comes the base case***" << std::endl;
+//**********************************************************//
+// Testeur de vector, int                                   //
+//**********************************************************//
+std::cout << std::endl << "Vector int" << std::endl;
+std::cout << "***Here comes the base case***" << std::endl;
 	{
 	std::vector<int> vec;
 	testerIntVec(vec);
 	}
 
-//**********************************************//
-// Testeur de int::vector                        //
-//**********************************************//
-std::cout << std::endl << "***Here comes my tester***" << std::endl;
-
+std::cout << std::endl << "***Here comes my version***" << std::endl;
 	{
 	ft::vector<int> vec;
 	testerIntVec(vec);
 	}
 
+//**********************************************************//
+// Testeur de vector, std::string                           //
+//**********************************************************//
+std::cout << std::endl << "Vector string" << std::endl;
+std::cout << "***Here comes the base case***" << std::endl;
 	{
-	ft::vector<std::string>vec;
-
+	std::vector<std::string>vec;
 	testerStrtVec(vec);
 	}
-	
+std::cout << "***Here comes my version***" << std::endl;
+	{
+	ft::vector<std::string>vec;
+	testerStrtVec(vec);
+	}
+
+//**********************************************************//
+// Testeur de stack                                         //
+//**********************************************************//
+std::cout << std::endl << "Stack" << std::endl;
+std::cout << "***Here comes the base case***" << std::endl;
+	{
+	std::pair<int, std::string> p1;
+	std::pair<int, std::string> p2 (2, "42");
+	p1 = std::make_pair<int, std::string>(12, "dudule");
+	pairtest(p1, p2);
+	}
+std::cout << "***Here comes my version***" << std::endl;
+	{
+	ft::pair<int, std::string> p1;
+	ft::pair<int, std::string> p2 (2, "42");
+	p1 = ft::make_pair<int, std::string>(12, "dudule");
+	pairtest(p1, p2);
+	}
+
 }
