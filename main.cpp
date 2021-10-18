@@ -59,4 +59,13 @@ std::cout << "***Here comes my version***" << std::endl;
 	pairtest(p1, p2);
 	}
 
+//**********************************************************//
+// Testeur de tree                                          //
+//**********************************************************//
+std::cout << std::endl << "Stack" << std::endl;
+std::cout << "***Here comes the base case***" << std::endl;
+	{
+		ft::Tree<ft::pair<int, int> > arbol;
+
+	}
 }

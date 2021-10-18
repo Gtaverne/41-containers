@@ -9,17 +9,17 @@ namespace ft
 	{
 	public:
 
-		typedef T1 type1;
-		typedef T2 type2;
+		typedef T1 first_type;
+		typedef T2 second_type;
 
-		type1 first;
-		type2 second;
+		first_type first;
+		second_type second;
 
 	//Canon
 		pair(): first(), second() {}
 		template<class U, class V>
 		pair (const pair<U,V>& pr): first(pr.first), second(pr.second) {}
-		pair (const type1& a, const type2& b): first(a), second(b) {}
+		pair (const first_type& a, const second_type& b): first(a), second(b) {}
 
 		pair & operator= (const pair &rhs)
 		{
