@@ -62,10 +62,13 @@ std::cout << "***Here comes my version***" << std::endl;
 //**********************************************************//
 // Testeur de tree                                          //
 //**********************************************************//
-std::cout << std::endl << "Stack" << std::endl;
-std::cout << "***Here comes the base case***" << std::endl;
+std::cout << std::endl << "Tree" << std::endl;
+std::cout << "***Here comes my tree***" << std::endl;
 	{
 		ft::Tree<ft::pair<int, int> > arbol;
-
+		//arbol.insertNode(arbol.insertNode(0, ft::make_pair(12, 140)), ft::make_pair(19, 1560));
+		
+		//arbol.printTree(0);
+		//std::cout << (arbol.finder(12)->value.second) << std::endl;
 	}
 }
