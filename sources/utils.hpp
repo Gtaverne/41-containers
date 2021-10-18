@@ -148,9 +148,7 @@ struct is_integral<signed char>
 
 template <>
 struct is_integral<short int>
-{
-    const static bool value = true;
-};
+{const static bool value = true;};
 
 template <>
 struct is_integral<int>
@@ -168,6 +166,7 @@ template <>
 struct is_integral<unsigned char>
 {const static bool value = true;};
 
+//A commenter sous linux
 template <>
 struct is_integral<unsigned short int>
 {const static bool value = true;};
