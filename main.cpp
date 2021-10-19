@@ -25,27 +25,6 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	ft::vector<int> vec;
 	testerIntVec(vec);
 	}
-	
-	{
-		ft::vector<int> myvector;
-  for (int i=0; i<10; i++) myvector.push_back(i);
-
-  typedef ft::vector<int>::iterator iter_type;
-                                                         // ? 9 8 7 6 5 4 3 2 1 0 ?
-  iter_type from (myvector.begin());                     //   ^
-                                                         //         ------>
-  iter_type until (myvector.end());                      //                       ^
-                                                         //
-  ft::my_rev_iterator<iter_type> rev_until (from);     // ^
-                                                         //         <------
-  ft::my_rev_iterator<iter_type> rev_from (until);     //                     ^
-
-  std::cout << "myvector:";
-  while (rev_from != rev_until)
-    std::cout << ' ' << *rev_from++;
-  std::cout << '\n';
-
-	}
 
 // //**********************************************************//
 // // Testeur de vector, std::string                           //
@@ -89,10 +68,8 @@ std::cout << "***Here comes my tree***" << std::endl;
 	{
 		ft::Tree<ft::pair<int, int> > arbol;
 		ft::Tree<ft::pair<int, int> >::Node *tmp_nd;
-		// arbol.insertNode(tmp_nd, ft::make_pair(12, 140));
-		// arbol.insertNode(tmp_nd, ft::make_pair(200, 10));
-		// arbol.insertNode(tmp_nd, ft::make_pair(15, 210));
-		treegenerator(&arbol, 100);
+
+		treegenerator(&arbol);
 
 		std::cout << "Root " << arbol.getRoot()->value.first << " " << arbol.getRoot()->value.second << std::endl;
 		std::cout << "Min " << arbol.getMin()->value.first << " " << arbol.getMin()->value.second << std::endl;
@@ -106,5 +83,8 @@ std::cout << "***Here comes my tree***" << std::endl;
 			std::cout << "Our node -> right: " << arbol.getHeight(tmp_nd->right) << std::endl << std::endl;
 			arbol.printTree(0);
 		}
+
+		
+
 	}
 }

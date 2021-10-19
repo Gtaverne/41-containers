@@ -21,8 +21,8 @@ namespace ft {
 		
 		typedef my_iterator<value_type> iterator;
 		typedef my_iterator<value_type const> const_iterator;
-		typedef my_rev_iterator<iterator>	reverse_iterator;	
-		typedef my_rev_iterator<const_iterator> const_reverse_iterator;	
+		typedef ft::reverse_iterator<iterator>	reverse_iterator;	
+		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;	
 		
 		typedef std::ptrdiff_t difference_type;
 		typedef size_t size_type;

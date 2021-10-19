@@ -8,7 +8,7 @@
 namespace ft
 {
 	template<class Iter>
-	class my_rev_iterator 
+	class reverse_iterator 
 	{
 	public:
 		typedef typename iterator_traits<Iter>::value_type value_type;
@@ -26,61 +26,61 @@ namespace ft
 //**********************************************//
 // Canon, constructors and casting              //
 //**********************************************//
-		my_rev_iterator(void) : _raw_iter(NULL) {};
-		explicit my_rev_iterator(iterator_type it): _raw_iter(it) {};
+		reverse_iterator(void) : _raw_iter(NULL) {};
+		explicit reverse_iterator(iterator_type it): _raw_iter(it) {};
 		template< class anyIter>
-		my_rev_iterator(const my_rev_iterator<anyIter>& src): _raw_iter(src.base()) {};
+		reverse_iterator(const reverse_iterator<anyIter>& src): _raw_iter(src.base()) {};
 
-		virtual ~my_rev_iterator(void) {};
-		my_rev_iterator & operator=(my_rev_iterator const & rhs) 
+		virtual ~reverse_iterator(void) {};
+		reverse_iterator & operator=(reverse_iterator const & rhs) 
 		{
 			this->_raw_iter = rhs._raw_iter;
 			return *this;
 		}
 
-		operator my_rev_iterator<my_iterator<value_type const> >() const
+		operator reverse_iterator<my_iterator<value_type const> >() const
 		{
-			return my_rev_iterator<my_iterator<value_type const > > (_raw_iter);
+			return reverse_iterator<my_iterator<value_type const > > (_raw_iter);
 		}
 
-		operator my_rev_iterator<my_iterator<value_type> >() 
+		operator reverse_iterator<my_iterator<value_type> >() 
 		{
-			return my_rev_iterator<my_iterator<value_type> > (_raw_iter);
+			return reverse_iterator<my_iterator<value_type> > (_raw_iter);
 		}
 	
 
 //**********************************************//
 // Basic + and -                                //
 //**********************************************//
-		my_rev_iterator operator+(difference_type n) const
+		reverse_iterator operator+(difference_type n) const
 		{
-			my_rev_iterator tmp = *this;
+			reverse_iterator tmp = *this;
 			tmp += n; //+= permet deja de gerer le changement de signe
 			return tmp;
 		};
-		difference_type operator-(const my_rev_iterator &rhs) const
+		difference_type operator-(const reverse_iterator &rhs) const
 		{
 			return rhs._raw_iter - _raw_iter;
 		}
-		my_rev_iterator operator-(difference_type n) 
+		reverse_iterator operator-(difference_type n) 
 		{
-			my_rev_iterator tmp = *this;
+			reverse_iterator tmp = *this;
 			tmp -= n; //-= permet deja de gerer le changement de signe
 			return tmp;
 		};
-		my_rev_iterator &operator+=(difference_type n)
+		reverse_iterator &operator+=(difference_type n)
 		{
 			_raw_iter -= n;
 			return *this;
 		}
-		my_rev_iterator &operator-=(difference_type n)
+		reverse_iterator &operator-=(difference_type n)
 		{
 			_raw_iter += n;
 			return *this;
 		}
-		friend my_rev_iterator operator+(difference_type n, const my_rev_iterator &rhs)
+		friend reverse_iterator operator+(difference_type n, const reverse_iterator &rhs)
 		{
-			my_rev_iterator tmp = rhs;
+			reverse_iterator tmp = rhs;
 			tmp += n; //+= permet deja de gerer le changement de signe
 			return tmp;
 		}
@@ -88,28 +88,28 @@ namespace ft
 //**********************************************//
 // Incrementations                              //
 //**********************************************//
-		my_rev_iterator& operator++(void)
+		reverse_iterator& operator++(void)
 		{
 			--_raw_iter;
 			return *this;
 		}
 
-		my_rev_iterator operator++(int)
+		reverse_iterator operator++(int)
 		{
-			my_rev_iterator tmp = *this;
+			reverse_iterator tmp = *this;
 			--_raw_iter;
 			return (tmp);
 		}
 
-		my_rev_iterator& operator--(void)
+		reverse_iterator& operator--(void)
 		{
 			++_raw_iter;
 			return *this;
 		}
 
-		my_rev_iterator operator--(int)
+		reverse_iterator operator--(int)
 		{
-			my_rev_iterator tmp = *this;
+			reverse_iterator tmp = *this;
 			++_raw_iter;
 			return (tmp);
 		}
@@ -133,29 +133,29 @@ namespace ft
 // Operator                                     //
 //**********************************************//
 	template <class T>
-	my_rev_iterator<T> & operator+(typename my_rev_iterator<T>::difference_type n, const my_rev_iterator<T> &iter) {return (iter + n);};
+	reverse_iterator<T> & operator+(typename reverse_iterator<T>::difference_type n, const reverse_iterator<T> &iter) {return (iter + n);};
 
 	template <class T>
-	my_rev_iterator<T> & operator-(typename my_rev_iterator<T>::difference_type n, const my_rev_iterator<T> &iter) {return iter - n;};
+	reverse_iterator<T> & operator-(typename reverse_iterator<T>::difference_type n, const reverse_iterator<T> &iter) {return iter - n;};
 
 	template <typename Iter1, typename Iter2>
-	bool operator==(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() == rhs.base();};
+	bool operator==(const reverse_iterator<Iter1>& lhs, const reverse_iterator<Iter2>& rhs) {return lhs.base() == rhs.base();};
 
 	template <typename Iter1, typename Iter2>
-	bool operator!=(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) 
+	bool operator!=(const reverse_iterator<Iter1>& lhs, const reverse_iterator<Iter2>& rhs) 
 	{return lhs.base() != rhs.base();};
 
 	template <typename Iter1, typename Iter2>
-	bool operator<(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() > rhs.base();};
+	bool operator<(const reverse_iterator<Iter1>& lhs, const reverse_iterator<Iter2>& rhs) {return lhs.base() > rhs.base();};
 
 	template <typename Iter1, typename Iter2>
-	bool operator>(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() < rhs.base();};
+	bool operator>(const reverse_iterator<Iter1>& lhs, const reverse_iterator<Iter2>& rhs) {return lhs.base() < rhs.base();};
 
 	template <typename Iter1, typename Iter2>
-	bool operator<=(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() >= rhs.base();};
+	bool operator<=(const reverse_iterator<Iter1>& lhs, const reverse_iterator<Iter2>& rhs) {return lhs.base() >= rhs.base();};
 
 	template <typename Iter1, typename Iter2>
-	bool operator>=(const my_rev_iterator<Iter1>& lhs, const my_rev_iterator<Iter2>& rhs) {return lhs.base() <= rhs.base();};
+	bool operator>=(const reverse_iterator<Iter1>& lhs, const reverse_iterator<Iter2>& rhs) {return lhs.base() <= rhs.base();};
 }
 
 

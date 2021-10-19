@@ -29,7 +29,7 @@ todo
 
 CANON
 
-insertNode
+
 insertValue
 delete
 deleteKey
@@ -55,6 +55,7 @@ private:
 	allocator_type _alloc_val;
 	std::allocator<Node> _alloc_node;
 	Node* _root;
+	Node* _last_leaf;
 
 	
 public:
@@ -64,8 +65,13 @@ public:
 
 	Tree (const key_comparator&comp = key_comparator(), const allocator_type& alloc = allocator_type()) : _comp (comp), _alloc_val (alloc)
 	{
-		std::cerr << "yolo, we have a tree" << std::endl;
+		std::cerr << std::endl << "yolo, we have a tree" << std::endl;
 		this->_root = 0;
+
+	}
+
+	~Tree()
+	{
 
 	}
 
@@ -78,10 +84,8 @@ public:
 	}
 
 //**********************************************************//
-// Canon                                                    //
+// Setters                                                  //
 //**********************************************************//
-
-
 
 	Node *newNode(value_type val, Node* parent)
 	{
@@ -91,11 +95,16 @@ public:
 		res->left = 0;
 		res->right = 0;
 		res->parent = parent;
-		if (!_root)
-			_root = res;
 		return res;
 	}
 
+//insertValue
+void insertValue(const value_type &val)
+{
+	_root = insertNode(_root, val);
+}
+
+//insertNode
 	Node *insertNode(Node *node, const value_type val, Node *parent = 0)
 	{
 		if (!node)
@@ -106,7 +115,7 @@ public:
 			node->right = insertNode(node->right, val, node);
 		else
 			return node;
-		//introduce the pivot here
+		node = balanceInsert(node, val.first);
 		return node;
 	}
 
@@ -132,7 +141,7 @@ public:
 	void printTree(Node *node, int i = 0)
 	{
 		if (!node && i == 0)
-			printTree(_root);
+			printTree(getRoot());
 		else if (node != 0)
 		{
 			std::cout << "Depth: " << i << " Key: " << node->value.first << " value: " << node->value.second << std::endl;
@@ -146,6 +155,8 @@ public:
 
 	Node *getRoot(void)
 	{
+		while (_root->parent)
+			_root = _root->parent;
 		return (_root);
 	}
 	Node *getMin(void)
@@ -192,29 +203,72 @@ public:
 	}
 
 	//balanceInsert
+	Node *balanceInsert(Node *node, const key_type key)
+	{
+		int bf = balanceFactor(node);
 
+		//left left
+		if (bf < - 1 && _comp(key, node->left->value.first))
+			return rightRotate(node);
+		//left right
+		if (bf < -1 && _comp(node->left->value.first, key))
+		{
+			node->left = leftRotate(node->left);
+			return rightRotate(node);
+		}
+		//right right
+		if (bf > 1 && _comp(node->right->value.first, key))
+			return leftRotate(node);
+		return node;
+		//right left
+		if (bf > 1  && _comp(key, node->right->value.first))
+		{
+			node->right = rightRotate(node->right);
+			return leftRotate(node);
+		}
+	}
 
 	//balanceDelete
 
 	//leftRotation
 	Node *leftRotate(Node *node)
 	{
-		Node *y = node->right;
-		Node *tmp = y->left;
+		Node *totop = node->right;
+		Node *tmp = totop->left;
 	
 		// Perform rotation
-		y->left = node;
-		node->right = tmp;
+		totop->parent = node->parent;
+		node->parent = totop;
 	
-		// Update heights
-		node->height = max(getHeight(node->left), getHeight(node->right)) + 1;
-		y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+		if (tmp)
+			tmp->parent = node;
+		node->right = tmp;
+		totop->left = node;
 	
 		// Return new root
-		return y;
+		return totop;
 	}
 
 	//rightRotation
+	Node *rightRotate(Node *node)
+	{
+		Node *totop = node->left;
+		Node *tmp = totop->right;
+	
+		// Perform rotation
+		totop->parent = node->parent;
+		node->parent = totop;
+	
+		if (tmp)
+			tmp->parent = node;
+		node->left = tmp;
+		totop->right = node;
+	
+		// Return new root
+		return totop;
+	}
+
+
 
 };
 
