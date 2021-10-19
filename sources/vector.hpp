@@ -216,7 +216,12 @@ void reserve (size_type n)
 template <class InputIterator>
 void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 {
-	size_type n = std::distance(first, last);
+	//size_type n = std::distance(first, last);
+	size_type n = 0;
+	InputIterator tmp = first;
+	while (tmp++ != last)
+		n++;
+
 	if (n > _max_capa)
 		reserve(n);
 	for (size_type i = 0; i < _current_len; i++)
@@ -278,7 +283,11 @@ void insert(iterator pos, size_type n, const T& value )
 template< class InputIt >
 void insert(iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = NULL)
 {
-	size_type n = std::distance(first, last);
+	//size_type n = std::distance(first, last);
+	size_type n = 0;
+	InputIt tmp = first;
+	while (tmp++ != last)
+		n++;
 	size_type l_start = &*pos - &*begin();
 	size_type l_end = &*end() - &*pos;
 

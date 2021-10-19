@@ -53,9 +53,10 @@ namespace ft
 //**********************************************//
 // Basic + and -                                //
 //**********************************************//
-		difference_type operator-(const my_iterator &rhs) const {return ptr_iter - rhs.ptr_iter;};
-		my_iterator<T> operator+(difference_type n) const {return ptr_iter + n;};
-		my_iterator<T> operator-(difference_type n) const {return ptr_iter - n;};
+		difference_type operator-(const my_iterator &rhs) const {return ptr_iter - rhs.ptr_iter;}
+		
+		my_iterator<T> operator+(difference_type n) const {return ptr_iter + n;}
+		my_iterator<T> operator-(difference_type n) const {return ptr_iter - n;}
 		my_iterator<T> &operator+=(difference_type n)
 		{
 			ptr_iter += n;

@@ -6,6 +6,9 @@
 #include "./sources/pair.hpp"
 #include <iostream>
 
+#include <time.h>
+#include <stdlib.h>
+
 //None of those function is mandatory. Just my own tests
 
 template <class anyintvector>
@@ -63,6 +66,13 @@ void pairtest(anypair1 pair1, anypair2 pair2)
 	std::cout << "pair1 == pair2: " << (pair1 == pair2) << std::endl;
 	anypair2 nioupair(pair2);
 	std::cout << "nioupair(pair2) == pair2: "<< (nioupair == pair2) << std::endl;
+}
+
+template < typename Tree>
+void treegenerator(Tree *tr, int len = 20)
+{
+	for (int i = 0 ; i < len; i++)
+		tr->insertNode(tr->getRoot(), ft::make_pair(rand() % len, rand() % 1000));
 }
 
 #endif
