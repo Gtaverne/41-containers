@@ -69,13 +69,13 @@ std::cout << "***Here comes my tree***" << std::endl;
 		ft::Tree<ft::pair<int, int> > arbol;
 		ft::Tree<ft::pair<int, int> >::Node *tmp_nd;
 
-		treegenerator(&arbol, 10);
+		treegenerator(&arbol, 50);
 
 		std::cout << "Root " << arbol.getRoot()->value.first << " " << arbol.getRoot()->value.second << std::endl;
 		std::cout << "Min " << arbol.getMin()->value.first << " " << arbol.getMin()->value.second << std::endl;
 		std::cout << "Max " << arbol.getMax()->value.first << " " << arbol.getMax()->value.second << std::endl;
 
-		if ((tmp_nd = arbol.finder(15)))
+		if ((tmp_nd = arbol.finder(20)))
 		{
 			std::cout << "FOUND key=15: " << tmp_nd->value.first << " " << tmp_nd->value.second << std::endl;
 			std::cout << "Balance factor of 15: " << arbol.balanceFactor(tmp_nd) << std::endl << std::endl;
@@ -87,9 +87,9 @@ std::cout << "***Here comes my tree***" << std::endl;
 		treecopy = arbol;
 		treecopy.printTree(0);
 
-		std::cout << std::endl << "We delete key=5" << std::endl;
+		std::cout << std::endl << "We want to delete key=5" << std::endl;
 		treecopy.delete_node(treecopy.getRoot(), 5);
-		arbol.printTree(0);
+		treecopy.printTree(0);
 
 
 	}
