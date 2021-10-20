@@ -46,8 +46,6 @@ find
 		Node *left;
 		Node *right;
 		Node *parent;
-
-
 	};
 
 private:
@@ -55,7 +53,7 @@ private:
 	allocator_type _alloc_val;
 	std::allocator<Node> _alloc_node;
 	Node* _root;
-	Node* _last_leaf;
+	//Node* _last_leaf;
 
 	
 public:
@@ -63,23 +61,34 @@ public:
 // Canon                                                    //
 //**********************************************************//
 
-	Tree (const key_comparator&comp = key_comparator(), const allocator_type& alloc = allocator_type()) : _comp (comp), _alloc_val (alloc)
+	//basic
+	Tree (const key_comparator& comp = key_comparator(), const allocator_type& alloc = allocator_type()) : _comp (comp), _alloc_val (alloc)
 	{
 		std::cerr << std::endl << "yolo, we have a tree" << std::endl;
 		this->_root = 0;
-
 	}
+
+	//copy
+	Tree (const Tree& src)
+	{this = copyNode(src._root); }
 
 	~Tree()
 	{
-
+		clear_all();
 	}
 
 	Tree &operator=(const Tree &rhs)
 	{
-		//destroyBelow(_root);
+		if (this == &rhs)
+			return *this;
+		destroy_below(_root);
+		//std::cerr << std::endl << "So far, the copy works" << std::endl;
+
 		_root = 0;
-		_comp = rhs._comp; 
+		_comp = rhs._comp;
+		_alloc_node = rhs._alloc_node;
+		_alloc_val = rhs._alloc_val;
+		_root = copyNode(_root, rhs._root);
 		return *this;
 	}
 
@@ -99,10 +108,10 @@ public:
 	}
 
 //insertValue
-void insertValue(const value_type &val)
-{
-	_root = insertNode(_root, val);
-}
+	void insertValue(const value_type &val)
+	{
+		_root = insertNode(_root, val);
+	}
 
 //insertNode
 	Node *insertNode(Node *node, const value_type val, Node *parent = 0)
@@ -119,10 +128,25 @@ void insertValue(const value_type &val)
 		return node;
 	}
 
+//copy node (and everything below)
+	Node *copyNode(Node* dest, Node *src)
+	{
+		//The new tree is not necessarily in the same order
+		//don't we have to clean dest first ?
+		//destroy_below(dest);
+		if (src)
+		{
+			dest = copyNode(dest, src->left);
+			dest = copyNode(dest, src->right);
+			dest = insertNode(dest, src->value);
+		}
+		return (dest);
+	}
+
 //**********************************************************//
 // Readers                                                  //
 //**********************************************************//
-// find, check if it has to be const
+// find, (check if it has to be const)
 	Node *finder(const key_type &k)
 	{
 		Node *tmp = _root;
@@ -141,7 +165,7 @@ void insertValue(const value_type &val)
 	void printTree(Node *node, int i = 0)
 	{
 		if (!node && i == 0)
-			printTree(getRoot());
+			printTree(_root);
 		else if (node != 0)
 		{
 			std::cout << "Depth: " << i << " Key: " << node->value.first << " value: " << node->value.second << std::endl;
@@ -155,20 +179,20 @@ void insertValue(const value_type &val)
 
 	Node *getRoot(void)
 	{
-		while (_root->parent)
-			_root = _root->parent;
 		return (_root);
 	}
-	Node *getMin(void)
+	Node *getMin(Node *res = 0)
 	{	
-		Node *res = _root;
+		if (!res)
+			res = _root;
 		while (res->left)
 			res = res->left;
 		return res;
 	}
-	Node *getMax(void)
+	Node *getMax(Node *res = 0)
 	{	
-		Node *res = _root;
+		if (!res)
+			res = _root;
 		while (res->right)
 			res = res->right;
 		return res;
@@ -268,7 +292,99 @@ void insertValue(const value_type &val)
 		return totop;
 	}
 
+//**********************************************************//
+// Cleaners                                                 //
+//**********************************************************//
 
+	void clear_all (void)
+	{
+		destroy_below(_root);
+	}
+
+	//can kill an entire branch
+	void destroy_below(Node *node)
+	{
+		if (node)
+		{
+			destroy_below(node->left);
+			destroy_below(node->right);
+			_alloc_val.destroy(&node->value);
+			_alloc_node.deallocate(node, 1);
+		}
+	}
+
+
+	/*delete a single node and re-connects what's below
+	https://www.geeksforgeeks.org/avl-tree-set-2-deletion/
+	1-You dive until you find the node with _key_
+	2.a-If the keynode has one empty branch below, L or R, you connect the non-empty one to the parent
+	2.b-Find the closest node just superior (getMin(node->right)) and switch it, then we delete it iteratively
+	3-You cleanly destroy the node
+	4-Balance that tree
+	*/
+	Node *delete_node(Node *node, const key_type key)
+	{
+		std::cerr << "delN ";
+		if (!node)
+			return (node);
+		if (_comp(key, node->value.first)) //1
+			node->left = delete_node(node->left, key); 
+		else if (_comp(node->value.first, key)) //1
+			node->right = delete_node(node->right, key);
+		else
+		{
+			if(!node->left || !node->right) //2.a
+			{
+				Node *tmp = node;
+				std::cerr << "finally, we delete a bottom" << " Key: " << tmp->value.first << " value: " << tmp->value.second << std::endl;
+				
+				node = node->left ? node->left : node->right;
+				if (node)
+					node->parent = tmp->parent;
+				_alloc_val.destroy(&tmp->value); //3
+				_alloc_node.deallocate(tmp, 1);
+			}
+			else //2.b
+			{
+				Node *tmp  = getMin(node->right);
+				std::cerr << "We have 2 lower branches, the lowest upper value is" << " Key: " << tmp->value.first << " value: " << tmp->value.second << std::endl;
+				node->value = tmp->value;
+				/*
+				delete_node(node->right, node->value.first);
+
+				if(tmp != node->right)
+				{
+					tmp->right = node->right;
+					node->right->parent = tmp;
+				}
+				tmp->left = node->left;
+				node->left->parent = tmp;
+				//tmp->parent->left = 0;
+				tmp->parent = node->parent;
+				_alloc_val.destroy(&node->value); //3
+				_alloc_node.deallocate(node, 1);*/
+
+				if (tmp != node->right)
+				{
+					tmp->right = node->right;
+					node->right->parent = tmp;
+				}
+				if (tmp != node->left)
+				{
+					tmp->left = node->left;
+					node->left->parent = tmp;
+				}
+				tmp->parent->left = 0;
+				tmp->parent = node->parent;
+				// destroy it
+				this->_alloc_val.destroy(&node->value);
+				this->_alloc_node.deallocate(node, 1);
+				node = tmp;
+			}
+		}
+		//node = balanceDelete(node);
+		return (node);
+	}
 
 };
 
