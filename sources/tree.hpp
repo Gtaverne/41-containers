@@ -3,11 +3,12 @@
 
 #include "utils.hpp"
 #include "pair.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft
 {
 
-template <class T,class Compare = less<typename T::first_type>, class Alloc = std::allocator<T> >
+template <class T,class Compare = ft::less<typename T::first_type>, class Alloc = std::allocator<T> >
 class Tree
 {
 public:
@@ -24,13 +25,7 @@ public:
 	typedef value_type* pointer;
 	typedef const value_type* const_pointer;
 
-/********************************
-todo
 
-Check ussefulness of end_node
-
-
-************************************/
 	struct Node
 	{
 		value_type value;
@@ -38,6 +33,23 @@ Check ussefulness of end_node
 		Node *right;
 		Node *parent;
 	};
+
+//value_comp comes from here : https://www.cplusplus.com/reference/map/map/value_comp/
+
+class value_compare
+{   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
+ // friend class map;
+protected:
+  Compare comp;
+public:
+  value_compare (Compare c) : comp(c) {}
+  typedef bool result_type;
+  typedef value_type first_argument_type;
+  typedef value_type second_argument_type;
+  bool operator() (const value_type& x, const value_type& y) const
+  {  return comp(x.first, y.first);}
+};
+
 
 private:
 	key_comparator _comp;
@@ -154,16 +166,11 @@ public:
 	void update_leaf(void)
 	{
 		if (_root)
-		{
-		// 	while(_root->parent)
-		// 		_root = _root->parent;
 			_last_leaf->parent = getMax(_root);
-			std::cout << " Key: " << _root->value.first << " value: " << _root->value.second << std::endl;
-		}
 		else
 			_last_leaf->parent = 0;
-		_last_leaf->right = 0;
-		_last_leaf->left = 0;
+		// _last_leaf->right = 0;
+		// _last_leaf->left = 0;
 	}
 
 //**********************************************************//
@@ -235,7 +242,7 @@ public:
 // operator []
 	mapped_type &operator[](const key_type& key)
 	{
-		Node *res = find(key);
+		Node *res = finder(key);
 		if(res)
 			return res->value.second;
 		_root = insertNode(_root, ft::make_pair<const key_type, mapped_type>(key, mapped_type()));
@@ -244,13 +251,23 @@ public:
 	}
 
 //first_node
-
-
-
-
+Node *begin_node() const {return _root ? getMin() : _last_leaf;}
 //last_node
+Node *end_node() const {return _last_leaf;}
+//Comparator
+key_comparator comparator() const {return _comp;}
 
-
+size_type sizeNode(Node *node) const
+{
+	size_type s = 0;
+	if (node)
+	{
+		s += sizeNode(node->left);
+		s += sizeNode(node->right);
+		s++;
+	}
+	return s;
+}
 
 
 //**********************************************************//
@@ -446,8 +463,13 @@ public:
 		update_leaf();
 	}
 
-};
 
+//**********************************************************//
+// Functions for map                                        //
+//**********************************************************//
+size_type size(void) const {return sizeNode(_root);}
+
+};
 }
 
 #endif

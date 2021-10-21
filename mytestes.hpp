@@ -4,6 +4,9 @@
 #include "./sources/vector.hpp"
 #include "./sources/stack.hpp"
 #include "./sources/pair.hpp"
+#include "./sources/map.hpp"
+
+
 #include <iostream>
 
 #include <time.h>
@@ -12,7 +15,7 @@
 //None of those function is mandatory. Just my own tests
 
 template <class anyintvector>
-void testerIntVec(anyintvector vec)
+void testerIntVec(anyintvector &vec)
 {
 	std::cout << "Initial capacity " << vec.capacity() << std::endl;
 	std::cout << "Initial empty " << vec.empty() << std::endl;
@@ -42,7 +45,7 @@ void testerIntVec(anyintvector vec)
 }
 
 template <class stringvec>
-void testerStrtVec(stringvec vec)
+void testerStrtVec(stringvec &vec)
 {
 	std::cout << "Initial capacity " << vec.capacity() << std::endl;
 	std::cout << "Initial empty " << vec.empty() << std::endl;
@@ -59,7 +62,7 @@ void testerStrtVec(stringvec vec)
 }
 
 template <typename anypair1, typename anypair2>
-void pairtest(anypair1 pair1, anypair2 pair2)
+void pairtest(anypair1 &pair1, anypair2 &pair2)
 {
 	pair1.first = 1;
 	pair1.second += " for president";
@@ -73,6 +76,18 @@ void treegenerator(Tree *tr, int len = 20)
 {
 	for (int i = 0 ; i < len; i++)
 		tr->insertValue(ft::make_pair(rand() % len, rand() % 1000));
+}
+
+
+template <class anymap>
+void testerIntMap(anymap &mymap)
+{
+	std::cout << "Size: " << mymap.size() << std::endl;
+	std::cout << "Max size: " << mymap.max_size() << std::endl;
+	mymap[3] = 42;
+	std::cout << "map[3]" << mymap[3] << std::endl;
+	anymap tmp;
+
 }
 
 #endif

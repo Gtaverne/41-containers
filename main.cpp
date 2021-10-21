@@ -3,6 +3,7 @@
 #include "./sources/stack.hpp"
 #include <vector>
 #include <stack>
+#include <map>
 #include "mytestes.hpp"
 #include <typeinfo>
 
@@ -69,7 +70,7 @@ std::cout << "***Here comes my tree***" << std::endl;
 		ft::Tree<ft::pair<int, int> > arbol;
 		ft::Tree<ft::pair<int, int> >::Node *tmp_nd;
 
-		treegenerator(&arbol, 50);
+		treegenerator(&arbol, 20);
 
 		std::cout << "Root " << arbol.getRoot()->value.first << " " << arbol.getRoot()->value.second << std::endl;
 		std::cout << "Min " << arbol.getMin()->value.first << " " << arbol.getMin()->value.second << std::endl;
@@ -90,7 +91,32 @@ std::cout << "***Here comes my tree***" << std::endl;
 		std::cout << std::endl << "We want to delete key=5" << std::endl;
 		treecopy.delete_node(treecopy.getRoot(), 5);
 		treecopy.printTree(0);
+	}
 
+//**********************************************************//
+// Testeur de map                                           //
+//**********************************************************//
+std::cout << std::endl << "Map int" << std::endl;
+std::cout << "***Here comes the base case***" << std::endl;
+	{
+	std::map<int, int> mymap;
+	for (int i = 0 ; i < 50; i++)
+		mymap.insert(std::pair<int, int>(rand() % 20, rand() % 1000));
+	std::map<int, int>:: iterator it = mymap.begin();
+	std::map<int, int>:: const_iterator end = mymap.end();
 
+	while (it != end)
+	{
+		std::cout << it->first << std::endl;
+		it++;
+	}
+	testerIntMap(mymap);
+	}
+
+std::cout << std::endl << "***Here comes my version***" << std::endl;
+	{
+	ft::map<int, int> mymap;
+	testerIntMap(mymap);
+	(void)mymap;
 	}
 }
