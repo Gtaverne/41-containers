@@ -9,6 +9,9 @@
 
 namespace ft
 {
+	//https://www.cplusplus.com/reference/iterator/BidirectionalIterator/
+	//Check here the possible operations
+
 	template<class T>
 	class map_iterator 
 	{
@@ -19,7 +22,7 @@ namespace ft
 		typedef ptrdiff_t difference_type;
 		typedef std::bidirectional_iterator_tag iterator_category;
 
-		typedef typename T::key_compare key_comparator;
+		typedef typename T::key_comparator key_comparator;
 		typedef typename T::Node Node;
 	
 	private:
@@ -28,20 +31,24 @@ namespace ft
 		key_comparator key_comp;
 
 	public:
-		pointer getIter(void) const {return ptr_iter;};
+		Node *base(void) const {return ptr_iter;};
+		Node *end(void) const {return ptr_end;};
+
 //**********************************************//
 // Canon, constructors and casting              //
 //**********************************************//
 		map_iterator(void) : ptr_iter(NULL), ptr_end(NULL) {};
 		map_iterator(const map_iterator &src) {*this = src;};
-		virtual ~map_iterator(void) {};
+		virtual ~map_iterator() {};
 		map_iterator & operator=(map_iterator const & rhs) 
 		{
 			this->ptr_iter = rhs.ptr_iter;
+			this->ptr_end = rhs.ptr_end;
+			key_comp = rhs.key_comp;
 			return *this;
 		}
 
-		map_iterator(Node begin, Node end): ptr_iter(begin), ptr_end(end) {};
+		map_iterator(Node* nd, Node* end): ptr_iter(nd), ptr_end(end) {};
 
 		operator map_iterator<const value_type>() const
 		{
@@ -51,10 +58,6 @@ namespace ft
 //**********************************************//
 // Logical comparison operators                 //
 //**********************************************//
-		bool operator<(const map_iterator &rhs) const {return ptr_iter < rhs.ptr_iter;};
-		bool operator>(const map_iterator &rhs) const {return ptr_iter > rhs.ptr_iter;};
-		bool operator<=(const map_iterator &rhs) const {return ptr_iter <= rhs.ptr_iter;};
-		bool operator>=(const map_iterator &rhs) const {return ptr_iter >= rhs.ptr_iter;};
 		bool operator==(const map_iterator &rhs) const {return ptr_iter == rhs.ptr_iter;};
 		bool operator!=(const map_iterator &rhs) const {return ptr_iter != rhs.ptr_iter;};
 
@@ -64,7 +67,10 @@ namespace ft
 //**********************************************//
 		map_iterator &operator++(void)
 		{
-			++ptr_iter;
+			if(this->ptr_iter->right)
+			{
+				this->ptr_iter = getMin(this->ptr_iter->right);
+			}
 			return *this;
 		}
 
@@ -94,7 +100,6 @@ namespace ft
 
 		reference operator*(void) const	{return (*ptr_iter);};
 		pointer operator->(void) const {return (ptr_iter);};
-		reference operator[](difference_type n) {return (ptr_iter[n]);};
 
 	};
 
@@ -112,22 +117,22 @@ namespace ft
 //**********************************************//
 
 template <typename Iter1, typename Iter2>
-bool operator==(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.getIter() == rhs.getIter();};
+bool operator==(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return (lhs.base() == rhs.base() && lhs.end() == rhs.end());};
 
 template <typename Iter1, typename Iter2>
-bool operator!=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.getIter() != rhs.getIter();};
+bool operator!=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return (!(lhs == rhs));};
 
 template <typename Iter1, typename Iter2>
-bool operator<(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.getIter() < rhs.getIter();};
+bool operator<(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.base() < rhs.base();};
 
 template <typename Iter1, typename Iter2>
-bool operator>(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.getIter() > rhs.getIter();};
+bool operator>(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.base() > rhs.base();};
 
 template <typename Iter1, typename Iter2>
-bool operator<=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.getIter() <= rhs.getIter();};
+bool operator<=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.base() <= rhs.base();};
 
 template <typename Iter1, typename Iter2>
-bool operator>=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.getIter() >= rhs.getIter();};
+bool operator>=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.base() >= rhs.base();};
 }
 
 #endif

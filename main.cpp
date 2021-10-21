@@ -100,23 +100,14 @@ std::cout << std::endl << "Map int" << std::endl;
 std::cout << "***Here comes the base case***" << std::endl;
 	{
 	std::map<int, int> mymap;
-	for (int i = 0 ; i < 50; i++)
-		mymap.insert(std::pair<int, int>(rand() % 20, rand() % 1000));
-	std::map<int, int>:: iterator it = mymap.begin();
-	std::map<int, int>:: const_iterator end = mymap.end();
-
-	while (it != end)
-	{
-		std::cout << it->first << std::endl;
-		it++;
-	}
+	mymap.insert(std::pair<int, int>(rand() % 20, rand() % 1000));
 	testerIntMap(mymap);
 	}
 
 std::cout << std::endl << "***Here comes my version***" << std::endl;
 	{
 	ft::map<int, int> mymap;
+	mymap.insert(ft::pair<int, int>(rand() % 20, rand() % 1000));
 	testerIntMap(mymap);
-	(void)mymap;
 	}
 }

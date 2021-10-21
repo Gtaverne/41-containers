@@ -6,7 +6,7 @@ SRC		=	main.cpp
 
 OBJ 	=	$(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 #fsanitize can detect false positives with std::vector
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98  #-fsanitize=address -g
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98  -fsanitize=address -g
 
 ifneq (,$(findstring xterm,${TERM}))
 	GREEN := $(shell tput -Txterm setaf 2)

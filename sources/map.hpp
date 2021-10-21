@@ -3,6 +3,7 @@
 
 #include "tree.hpp"
 #include "map_iterator.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft
 {
@@ -22,7 +23,9 @@ typedef ft::pair<const Key, mapped_type> value_type;
 
 private:
 	typedef Tree<value_type, Compare, Alloc> tree;
+	typedef Tree<const value_type, Compare, Alloc> const_tree;
 	tree _tree;
+	typedef typename tree::Node Node;
 
 public:
 
@@ -31,11 +34,11 @@ typedef typename tree::value_compare value_compare;
 typedef Alloc allocator_type;
 
 typedef typename tree::reference reference;
-	// const_reference
+typedef typename tree::const_reference const_reference;
 	// pointer
 	// const_pointer
-	// iterator
-	// const_iterator
+typedef typename ft::map_iterator<tree> iterator;
+typedef typename ft::map_iterator<const_tree> const_iterator; //not yet working
 	// reverse_iterator
 	// const_reverse_iterator
 
@@ -46,15 +49,7 @@ typedef size_t size_type;
 // Canon                                                    //
 //**********************************************************//
 explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc)
-{
-	// ft::Tree<ft::pair<int, int> > *proto;
-	// for (int i = 0 ; i < 50; i++)
-	// 	proto->insertValue(ft::make_pair(rand() % 20, rand() % 1000));
-	// _tree(&proto);
-
-	for (int i = 0 ; i < 50; i++)
-		_tree.insertValue(ft::make_pair(rand() % 20, rand() % 1000));
-}
+{}
 
 //template <class InputIterator> map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc) {}
 
@@ -62,16 +57,18 @@ map (const map& x);
 
 ~map() {}
 
+
+
 //**********************************************************//
 // Iterator                                                 //
 //**********************************************************//
 //begin
-// iterator begin();
-// const_iterator begin() const;
+iterator begin() {return iterator(_tree.begin_node(), _tree.end_node());}
+const_iterator begin() const {return const_iterator(_tree.begin_node(), _tree.end_node());}
 
 //end
-// iterator end();
-// const_iterator end() const;
+iterator end() {return iterator(_tree.end_node(), _tree.end_node());}
+const_iterator end() const {return const_iterator(_tree.end_node(), _tree.end_node());}
 
 //rbegin
 // reverse_iterator rbegin();
@@ -104,7 +101,15 @@ mapped_type& operator[] (const key_type& k) {return _tree[k];}
 // Modifiers                                                //
 //**********************************************************//
 //insert
-// pair<iterator,bool> insert (const value_type& val);
+pair<iterator,bool> insert (const value_type& val)
+{
+	size_type n = this->size();
+	_tree.insertValue(val);
+	pair<iterator, bool> res;
+	res.first = find(val.first);
+	res.second = (n != size());
+	return res;
+}
 
 //iterator insert (iterator position, const value_type& val);
 
@@ -138,7 +143,13 @@ mapped_type& operator[] (const key_type& k) {return _tree[k];}
 // Operations                                               //
 //**********************************************************//
 //find
-// iterator find (const key_type& k);
+iterator find (const key_type& k)
+{
+	Node *node = _tree.finder(k);
+	if (node)
+		return (iterator(node, _tree.end_node()));
+	return end();
+}
 // const_iterator find (const key_type& k) const;
 
 //count

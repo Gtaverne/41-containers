@@ -167,6 +167,8 @@ struct is_integral<unsigned char>
 {const static bool value = true;};
 
 //A commenter sous linux
+
+#ifdef __APPLE__
 template <>
 struct is_integral<unsigned short int>
 {const static bool value = true;};
@@ -174,6 +176,7 @@ struct is_integral<unsigned short int>
 template <>
 struct is_integral<unsigned int>
 {const static bool value = true;};
+#endif
 
 template <>
 struct is_integral<unsigned long int>
