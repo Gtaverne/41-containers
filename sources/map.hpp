@@ -23,9 +23,9 @@ typedef ft::pair<const key_type, mapped_type> value_type;
 
 private:
 	typedef Tree<value_type, Compare, Alloc> tree;
-	tree _tree;
 	typedef Tree<const value_type, Compare, Alloc> const_tree;
 	typedef typename tree::Node Node;
+
 
 public:
 
@@ -35,14 +35,14 @@ typedef Alloc allocator_type;
 
 typedef typename tree::reference reference;
 typedef typename tree::const_reference const_reference;
-	// pointer
-	// const_pointer
-typedef typename ft::map_iterator<tree> iterator;
+typedef typename tree::pointer pointer;
+typedef typename tree::const_pointer const_pointer;
 typedef typename ft::map_iterator<const_tree> const_iterator; //not yet working
-	// reverse_iterator
-	// const_reverse_iterator
+typedef typename ft::map_iterator<tree> iterator;
+typedef reverse_iterator<const_iterator> const_reverse_iterator; //not yet working
+typedef reverse_iterator<iterator> reverse_iterator; //not yet working
 
-	// difference_type
+typedef typename iterator_traits<iterator>::difference_type difference_type;
 typedef size_t size_type;
 
 //**********************************************************//
@@ -51,11 +51,21 @@ typedef size_t size_type;
 explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc)
 {}
 
-//template <class InputIterator> map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc) {}
+template <class InputIterator> map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc)
+{
+	this->insert(first, last);
+}
 
 map (const map& x);
 
 ~map() {}
+
+map &operator=(const map &rhs)
+{
+	//voir si on veut aussi copier les allocator type
+	_tree = rhs._tree;
+	return *this;
+}
 
 
 
@@ -75,14 +85,14 @@ const_iterator end() const {return const_iterator(_tree.end_node(), _tree.end_no
 // const_reverse_iterator rbegin() const;
 
 //rend
-//  reverse_iterator rend();
-// const_reverse_iterator rend() const;
+reverse_iterator rend();
+const_reverse_iterator rend() const;
 
 //**********************************************************//
 // Capacity                                                 //
 //**********************************************************//
 //empty
-//bool empty() const;
+bool empty() const { return (size() == 0); }
 
 //size
 size_type size() const {return _tree.size();}
@@ -111,10 +121,23 @@ pair<iterator,bool> insert (const value_type& val)
 	return res;
 }
 
-//iterator insert (iterator position, const value_type& val);
+iterator insert (iterator position, const value_type& val)
+{
+	iterator previous(position);
+	if (value_comp()(*previous, val) && value_comp()(val, *(++position)))
+	{
+		this->_tree.insertValue(val);
+		return find(val.first);
+	}
+	return insert(val).first;
+}
 
-//template <class InputIterator>
-//void insert (InputIterator first, InputIterator last);
+template <class InputIterator>
+void insert (InputIterator first, InputIterator last)
+{
+	for(InputIterator it = first; it != last ; it++)
+		_tree.insertValue(*it);
+}
 
 
 //erase
@@ -126,17 +149,17 @@ pair<iterator,bool> insert (const value_type& val)
 //void swap (map& x);
 
 //clear
-//void clear();
+void clear() {_tree.clear_all();}
 
 
 //**********************************************************//
 // Observers                                                //
 //**********************************************************//
 //key comp
-// key_compare key_comp() const;
+key_compare key_comp() const {return _tree.comparator();}
 
 //value_comp
-//value_compare value_comp() const;
+value_compare value_comp() const {return _tree.valcomp();}
 
 
 //**********************************************************//
@@ -153,7 +176,7 @@ iterator find (const key_type& k)
 // const_iterator find (const key_type& k) const;
 
 //count
-//size_type count (const key_type& k) const;
+size_type count (const key_type& k) const {return (_tree.find(k) ? 1 : 0);}
 
 //lower_bound
 // iterator lower_bound (const key_type& k);
@@ -173,6 +196,9 @@ iterator find (const key_type& k)
 //**********************************************************//
 //get_allocator
 //allocator_type get_allocator() const;
+
+private :
+	tree _tree;
 
 
 };

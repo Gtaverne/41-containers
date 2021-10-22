@@ -102,16 +102,18 @@ std::cout << std::endl << "Map int" << std::endl;
 std::cout << "***Here comes the base case***" << std::endl;
 	{
 	std::map<int, int> mymap;
+	std::pair<int, int> tempaire;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(std::pair<int, int>(i + 10, 10 * i));
-	testerIntMap(mymap);
+	testerIntMap(mymap, tempaire);
 	}
 
 std::cout << std::endl << "***Here comes my version***" << std::endl;
 	{
 	ft::map<int, int> mymap;
+	ft::pair<int, int> tempaire;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
-	testerIntMap(mymap);
+	testerIntMap(mymap, tempaire);
 	}
 }

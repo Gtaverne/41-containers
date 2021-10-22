@@ -195,7 +195,7 @@ public:
 			update_leaf();
 			return;
 		}
-		if (_root)
+		if (_root )
 			_last_leaf->parent = getMax(_root);
 		else
 			_last_leaf->parent = 0;
@@ -256,6 +256,8 @@ public:
 
 	Node *getMax(Node *res = 0)
 	{	
+		if (!_root)
+			return 0;
 		if (!res)
 			res = _root;
 		while (res->right)
@@ -294,6 +296,7 @@ Node *begin_node() const {return _root ? _root->nd_Min() : _last_leaf;}
 Node *end_node() const {return _last_leaf;}
 //Comparator
 key_comparator comparator() const {return _comp;}
+value_compare valcomp() const {return (value_compare(_comp));}
 
 size_type sizeNode(Node *node) const
 {
