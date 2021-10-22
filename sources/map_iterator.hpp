@@ -16,14 +16,15 @@ namespace ft
 	class map_iterator 
 	{
 	public:
-		typedef T value_type;
-		typedef value_type *pointer;
-		typedef value_type &reference;
+		typedef typename T::value_type value_type;
+		typedef typename T::pointer pointer;
+		typedef typename T::reference reference;
 		typedef ptrdiff_t difference_type;
 		typedef std::bidirectional_iterator_tag iterator_category;
 
-		typedef typename T::key_comparator key_comparator;
 		typedef typename T::Node Node;
+		typedef typename T::key_type key_type;
+		typedef typename T::key_comparator key_comparator;
 	
 	private:
 		Node *ptr_iter;
@@ -52,14 +53,14 @@ namespace ft
 
 		operator map_iterator<const value_type>() const
 		{
-			return map_iterator<value_type const>(ptr_iter);
+			return map_iterator<value_type const>(ptr_iter, ptr_end);
 		}
 
 //**********************************************//
 // Logical comparison operators                 //
 //**********************************************//
-		bool operator==(const map_iterator &rhs) const {return ptr_iter == rhs.ptr_iter;};
-		bool operator!=(const map_iterator &rhs) const {return ptr_iter != rhs.ptr_iter;};
+		bool operator==(const map_iterator &rhs) const {return ptr_iter == rhs.ptr_iter;}
+		bool operator!=(const map_iterator &rhs) const {return ptr_iter != rhs.ptr_iter;}
 
 
 //**********************************************//
@@ -69,8 +70,22 @@ namespace ft
 		{
 			if(this->ptr_iter->right)
 			{
-				this->ptr_iter = getMin(this->ptr_iter->right);
+				this->ptr_iter = this->ptr_iter->right->nd_Min();
+				return *this;
 			}
+			else if (this->ptr_iter->parent)
+			{
+				key_type ref_key = this->ptr_iter->value.first;
+				Node *tmp = this->ptr_iter->parent;
+				while (tmp && this->key_comp(tmp->value.first, ref_key))
+					tmp = tmp->parent;
+				if (tmp)
+				{
+					this->ptr_iter = tmp;
+					return *this;
+				}
+			}
+			this->ptr_iter = this->ptr_end;
 			return *this;
 		}
 
@@ -83,7 +98,7 @@ namespace ft
 		map_iterator operator++(int)
 		{
 			map_iterator tmp(*this);
-			++ptr_iter;
+			++(*this);
 			return (tmp);
 		}
 
@@ -98,19 +113,19 @@ namespace ft
 // Basic manips                                 //
 //**********************************************//
 
-		reference operator*(void) const	{return (*ptr_iter);};
-		pointer operator->(void) const {return (ptr_iter);};
+		reference operator*(void) const	{return (this->ptr_iter->value);}
+		pointer operator->(void) const {return ( &(operator*()));}
 
 	};
 
-//**********************************************//
-// Operator in the case 'int +- iter'           //
-//**********************************************//
-	template <class T>
-	map_iterator<T> & operator+(typename map_iterator<T>::difference_type n, const map_iterator<T> &iter) {return iter + n;};
+// //**********************************************//
+// // Operator in the case 'int +- iter'           //
+// //**********************************************//
+// 	template <class T>
+// 	map_iterator<T> & operator+(typename map_iterator<T>::difference_type n, const map_iterator<T> &iter) {return iter + n;};
 
-	template <class T>
-	map_iterator<T> & operator-(typename map_iterator<T>::difference_type n, const map_iterator<T> &iter) {return iter - n;};
+// 	template <class T>
+// 	map_iterator<T> & operator-(typename map_iterator<T>::difference_type n, const map_iterator<T> &iter) {return iter - n;};
 
 //**********************************************//
 // Comparison tool   DEFINE EQUAL HERE          //

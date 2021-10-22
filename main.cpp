@@ -45,21 +45,21 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 // //**********************************************************//
 // // Testeur de stack                                         //
 // //**********************************************************//
-// std::cout << std::endl << "Stack" << std::endl;
-// std::cout << "***Here comes the base case***" << std::endl;
-// 	{
-// 	std::pair<int, std::string> p1;
-// 	std::pair<int, std::string> p2 (2, "42");
-// 	p1 = std::make_pair<int, std::string>(12, "dudule");
-// 	pairtest(p1, p2);
-// 	}
-// std::cout << "***Here comes my version***" << std::endl;
-// 	{
-// 	ft::pair<int, std::string> p1;
-// 	ft::pair<int, std::string> p2 (2, "42");
-// 	p1 = ft::make_pair<int, std::string>(12, "dudule");
-// 	pairtest(p1, p2);
-// 	}
+std::cout << std::endl << "Stack" << std::endl;
+std::cout << "***Here comes the base case***" << std::endl;
+	{
+	std::pair<int, std::string> p1;
+	std::pair<int, std::string> p2 (2, "42");
+	p1 = std::make_pair<int, std::string>(12, "dudule");
+	pairtest(p1, p2);
+	}
+std::cout << "***Here comes my version***" << std::endl;
+	{
+	ft::pair<int, std::string> p1;
+	ft::pair<int, std::string> p2 (2, "42");
+	p1 = ft::make_pair<int, std::string>(12, "dudule");
+	pairtest(p1, p2);
+	}
 
 //**********************************************************//
 // Testeur de tree                                          //
@@ -83,9 +83,11 @@ std::cout << "***Here comes my tree***" << std::endl;
 			std::cout << "Our node -> left: " << arbol.getHeight(tmp_nd->left) << std::endl << std::endl;
 			std::cout << "Our node -> right: " << arbol.getHeight(tmp_nd->right) << std::endl << std::endl;
 		}
+		std::cout << std::endl << "Here is arbol the tree" << std::endl;
 		arbol.printTree(0);
 		ft::Tree<ft::pair<int, int> > treecopy;
 		treecopy = arbol;
+		std::cout << std::endl << "Here is its copy" << std::endl;
 		treecopy.printTree(0);
 
 		std::cout << std::endl << "We want to delete key=5" << std::endl;
@@ -100,14 +102,16 @@ std::cout << std::endl << "Map int" << std::endl;
 std::cout << "***Here comes the base case***" << std::endl;
 	{
 	std::map<int, int> mymap;
-	mymap.insert(std::pair<int, int>(rand() % 20, rand() % 1000));
+	for (int i = 0; i < 10; i++)
+		mymap.insert(std::pair<int, int>(i + 10, 10 * i));
 	testerIntMap(mymap);
 	}
 
 std::cout << std::endl << "***Here comes my version***" << std::endl;
 	{
 	ft::map<int, int> mymap;
-	mymap.insert(ft::pair<int, int>(rand() % 20, rand() % 1000));
+	for (int i = 0; i < 10; i++)
+		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
 	testerIntMap(mymap);
 	}
 }

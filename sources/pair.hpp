@@ -29,6 +29,7 @@ namespace ft
 			this->second = rhs.second;
 			return *this;
 		}
+		~pair(){};
 	};
 
 //**********************************************//

@@ -82,19 +82,32 @@ void treegenerator(Tree *tr, int len = 20)
 template <class anymap>
 void testerIntMap(anymap &mymap)
 {
+
+	
 	std::cout << "Size: " << mymap.size() << std::endl;
 	std::cout << "Max size: " << mymap.max_size() << std::endl;
-	mymap[3] = 42;
-	std::cout << "map[3]" << mymap[3] << std::endl;
+	mymap[25] = 5724;
+	std::cout << "map[25]: " << mymap[25] << std::endl;
 	anymap tmp;
 	typename anymap::iterator it = mymap.begin();
 	//typename anymap::const_iterator c_it(mymap.begin());
 	typename anymap::iterator fin = mymap.end();
+	typename anymap::iterator up = ++(++mymap.begin());
 
-	std::cout << "it == it: " << (it == it) << std::endl;
-	//std::cout << "it == c_it: " << (it == c_it) << std::endl;
+	fin = it;
+	std::cout << "it->first: " << (it->first) << std::endl;
+	std::cout << "fin->first: " << (fin->first) << std::endl;
+	std::cout << "up->second: " << (up->second) << std::endl;
 
-	std::cout << "it == fin: " << (it == fin) << std::endl;
+
+
+	// std::cout << "it == it: " << (it == it) << std::endl;
+	// //std::cout << "it == c_it: " << (it == c_it) << std::endl;
+
+	// std::cout << "it == fin: " << (it == fin) << std::endl;
+	// while (it != up)
+	// 	it++;
+	// std::cout << "it == tmp: " << (it == up) << std::endl;
 
 
 }

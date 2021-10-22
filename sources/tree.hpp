@@ -33,6 +33,30 @@ public:
 		Node *right;
 		Node *parent;
 		int load; //this is a bs number here to trick the tester -_-
+
+		Node *nd_Min()
+		{
+			Node *node = this;
+			while (node->left)
+				node = node->left;
+			return node;
+		}
+
+		Node *nd_Max()
+		{
+			Node *node = this;
+			while (node->right)
+				node = node->right;
+			return node;
+		}
+
+		Node *nd_Root()
+		{
+			Node *node = this;
+			while (node->parent)
+				node = node->parent;
+			return node;
+		}
 	};
 
 //value_comp comes from here : https://www.cplusplus.com/reference/map/map/value_comp/
@@ -97,16 +121,14 @@ public:
 		if (this == &rhs)
 			return *this;
 		destroy_below(_root);
-		//std::cerr << std::endl << "So far, the copy works" << std::endl;
-
 		_root = 0;
 		_alloc_node.deallocate(_last_leaf, 1);
 
 		_comp = rhs._comp;
 		_alloc_node = rhs._alloc_node;
 		_alloc_val = rhs._alloc_val;
-		_root = copyNode(_root, rhs._root);
 		_last_leaf = _alloc_node.allocate(1);
+		_root = copyNode(_root, rhs._root);
 		update_leaf();
 		return *this;
 	}
@@ -165,12 +187,18 @@ public:
 
 	void update_leaf(void)
 	{
+		if (!_last_leaf)
+		{
+			_last_leaf = _alloc_node.allocate(1);
+			_last_leaf->right = 0;
+			_last_leaf->left = 0;
+			update_leaf();
+			return;
+		}
 		if (_root)
 			_last_leaf->parent = getMax(_root);
 		else
 			_last_leaf->parent = 0;
-		// _last_leaf->right = 0;
-		// _last_leaf->left = 0;
 	}
 
 //**********************************************************//
@@ -192,6 +220,7 @@ public:
 		return 0;
 	}
 
+//PENSER A LA VIRER DE LA CORRECTION
 	void printTree(Node *node, int i = 0)
 	{
 		if (!node && i == 0)
@@ -260,7 +289,7 @@ public:
 	}
 
 //first_node
-Node *begin_node() const {return _root ? const_getMin() : _last_leaf;}
+Node *begin_node() const {return _root ? _root->nd_Min() : _last_leaf;}
 //last_node
 Node *end_node() const {return _last_leaf;}
 //Comparator

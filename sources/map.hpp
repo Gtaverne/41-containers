@@ -19,12 +19,12 @@ class map
 public:
 typedef Key key_type;
 typedef T mapped_type;
-typedef ft::pair<const Key, mapped_type> value_type;
+typedef ft::pair<const key_type, mapped_type> value_type;
 
 private:
 	typedef Tree<value_type, Compare, Alloc> tree;
-	typedef Tree<const value_type, Compare, Alloc> const_tree;
 	tree _tree;
+	typedef Tree<const value_type, Compare, Alloc> const_tree;
 	typedef typename tree::Node Node;
 
 public:
