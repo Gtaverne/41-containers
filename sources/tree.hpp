@@ -187,11 +187,13 @@ public:
 
 	void update_leaf(void)
 	{
+
 		if (!_last_leaf)
 		{
 			_last_leaf = _alloc_node.allocate(1);
 			_last_leaf->right = 0;
 			_last_leaf->left = 0;
+			_last_leaf->parent = 0;
 			update_leaf();
 			return;
 		}
@@ -469,7 +471,6 @@ size_type sizeNode(Node *node) const
 					node->parent = tmp->parent;
 				_alloc_val.destroy(&tmp->value); //3
 				_alloc_node.deallocate(tmp, 1);
-				tmp = 0;
 			}
 			else //2.b
 			{
@@ -481,11 +482,19 @@ size_type sizeNode(Node *node) const
 					tmp->right = node->right;
 					node->right->parent = tmp;
 				}
-				tmp->left = node->left;
-				node->left->parent = tmp;
+				if (tmp != node->left)
+				{
+					tmp->left = node->left;
+					node->left->parent = tmp;
+				}
 				tmp->parent->left = 0;
 				tmp->parent = node->parent;
 				// destroy it
+				if (_root == node)
+				{
+					//std::cerr << "Root deleted" << std::endl;
+					_root = tmp;
+				}
 				this->_alloc_val.destroy(&node->value);
 				this->_alloc_node.deallocate(node, 1);
 				

@@ -38,8 +38,8 @@ namespace ft
 //**********************************************//
 // Canon, constructors and casting              //
 //**********************************************//
-		map_iterator(void) : ptr_iter(NULL), ptr_end(NULL) {};
-		map_iterator(const map_iterator &src) {*this = src;};
+		map_iterator(void) : ptr_iter(NULL), ptr_end(NULL) {}
+		map_iterator(const map_iterator &src) : ptr_iter(src.ptr_iter), ptr_end(src.ptr_end), key_comp(src.key_comp) {}
 		virtual ~map_iterator() {};
 		map_iterator & operator=(map_iterator const & rhs) 
 		{
@@ -52,11 +52,11 @@ namespace ft
 		map_iterator(Node* nd, Node* end): ptr_iter(nd), ptr_end(end) {};
 
 		
-		operator map_iterator<const value_type>() const
-		{
-			std::cerr << "Map iterrator casting " << std::endl;
-			return map_iterator<const value_type>(ptr_iter, ptr_end);
-		}
+		// operator map_iterator<const value_type>() const
+		// {
+		// 	std::cerr << "Map iterrator casting to const" << std::endl;
+		// 	return this;
+		// }
 
 //**********************************************//
 // Logical comparison operators                 //
@@ -121,14 +121,18 @@ namespace ft
 
 	};
 
-// //**********************************************//
-// // Operator in the case 'int +- iter'           //
-// //**********************************************//
-// 	template <class T>
-// 	map_iterator<T> & operator+(typename map_iterator<T>::difference_type n, const map_iterator<T> &iter) {return iter + n;};
+//**********************************************//
+// INSERT CONST_ITERATOR HERE                   //
+//**********************************************//
 
-// 	template <class T>
-// 	map_iterator<T> & operator-(typename map_iterator<T>::difference_type n, const map_iterator<T> &iter) {return iter - n;};
+
+
+
+
+
+
+
+
 
 //**********************************************//
 // Comparison tool   DEFINE EQUAL HERE          //

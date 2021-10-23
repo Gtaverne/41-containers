@@ -30,17 +30,19 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 // //**********************************************************//
 // // Testeur de vector, std::string                           //
 // //**********************************************************//
-// std::cout << std::endl << "Vector string" << std::endl;
-// std::cout << "***Here comes the base case***" << std::endl;
-// 	{
-// 	std::vector<std::string>vec;
-// 	testerStrtVec(vec);
-// 	}
-// std::cout << "***Here comes my version***" << std::endl;
-// 	{
-// 	ft::vector<std::string>vec;
-// 	testerStrtVec(vec);
-// 	}
+std::cout << std::endl << "Vector string and vector of vector" << std::endl;
+std::cout << "***Here comes the base case***" << std::endl;
+	{
+	std::vector<std::string>vec;
+	std::vector<std::vector<std::string> >vecvec;
+	testerStrtVec(vec, vecvec);
+	}
+std::cout << "***Here comes my version***" << std::endl;
+	{
+	ft::vector<std::string>vec;
+	ft::vector<ft::vector<std::string> >vecvec;
+	testerStrtVec(vec, vecvec);
+	}
 
 // //**********************************************************//
 // // Testeur de stack                                         //
@@ -106,6 +108,12 @@ std::cout << "***Here comes the base case***" << std::endl;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(std::pair<int, int>(i + 10, 10 * i));
 	testerIntMap(mymap, tempaire);
+	std::vector<int> vec;
+	for (int i = 0; i < 100 ; i++)
+		vec.push_back(i * 5);
+	std::map<int, std::vector<int> > mapvec;
+	for (int i = 0; i < 10; i++)
+		mapvec.insert(std::pair<int, std::vector<int> >(i + 10, vec));
 	}
 
 std::cout << std::endl << "***Here comes my version***" << std::endl;
@@ -115,5 +123,11 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
 	testerIntMap(mymap, tempaire);
+	ft::vector<int> vec;
+	for (int i = 0; i < 100 ; i++)
+		vec.push_back(i * 5);
+	ft::map<int, ft::vector<int> > mapvec;
+	for (int i = 0; i < 10; i++)
+		mapvec.insert(ft::pair<int, ft::vector<int> >(i + 10, vec));
 	}
 }

@@ -44,8 +44,8 @@ void testerIntVec(anyintvector &vec)
 	std::cout << "at " << vec.at(8) << std::endl;
 }
 
-template <class stringvec>
-void testerStrtVec(stringvec &vec)
+template <class stringvec, class vecception>
+void testerStrtVec(stringvec &vec, vecception &vecvec)
 {
 	std::cout << "Initial capacity " << vec.capacity() << std::endl;
 	std::cout << "Initial empty " << vec.empty() << std::endl;
@@ -59,6 +59,14 @@ void testerStrtVec(stringvec &vec)
 	vec.erase(bob);
 	std::cout << "size after erase " << vec.size() << std::endl;
 	std::cout << *bob << std::endl;
+
+	std::cout << "vecvec capacity: " << vecvec.capacity() << std::endl;
+	for (int i = 0; i < 100 ; i++)
+		vecvec.push_back(vec);
+	
+	std::cout << "vecvec[10][12] " << (vecvec[10][12]) << std::endl;
+
+
 }
 
 template <typename anypair1, typename anypair2>
@@ -75,7 +83,7 @@ template < typename Tree>
 void treegenerator(Tree *tr, int len = 20)
 {
 	for (int i = 0 ; i < len; i++)
-		tr->insertValue(ft::make_pair(rand() % len, rand() % 1000));
+		tr->insertValue(ft::make_pair(i - 1, rand() % 1000));
 }
 
 
@@ -90,8 +98,8 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	std::cout << "map[25]: " << mymap[25] << std::endl;
 	anymap tmp;
 	typename anymap::iterator it = mymap.begin();
-	//typename anymap::const_iterator c_it = mymap.begin();
-	typename anymap::iterator fin = mymap.end();
+	typename anymap::iterator fin(mymap.end());
+	//typename anymap::const_iterator c_it(mymap.begin());
 	typename anymap::iterator up = ++(++mymap.begin());
 	// typename anymap::const_iterator c_it;
 	// typename anymap::const_iterator c_it2 = mymap.end();
@@ -113,6 +121,9 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	//std::cout << "c_it == c_it2: " << (c_it == c_it2) << std::endl;
 
 
+	anypair tempaire = paire;
+	tempaire.first = 42;
+	tempaire.second = 84;
 
 	// std::cout << "it == it: " << (it == it) << std::endl;
 	//std::cout << "it == c_it: " << (it == c_it) << std::endl;

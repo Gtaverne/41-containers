@@ -37,13 +37,17 @@ typedef typename tree::reference reference;
 typedef typename tree::const_reference const_reference;
 typedef typename tree::pointer pointer;
 typedef typename tree::const_pointer const_pointer;
-typedef typename ft::map_iterator<const_tree> const_iterator; //not yet working
+typedef typename ft::map_iterator<const tree> const_iterator; //not yet working
 typedef typename ft::map_iterator<tree> iterator;
 typedef reverse_iterator<const_iterator> const_reverse_iterator; //not yet working
 typedef reverse_iterator<iterator> reverse_iterator; //not yet working
 
 typedef typename iterator_traits<iterator>::difference_type difference_type;
 typedef size_t size_type;
+
+//Rebinding, check this article http://www.cplusplus.com/reference/memory/allocator/
+typedef typename Alloc::template rebind<Node>::other allocator_reb;
+
 
 //**********************************************************//
 // Canon                                                    //
@@ -199,7 +203,7 @@ size_type count (const key_type& k) const {return (_tree.find(k) ? 1 : 0);}
 
 private :
 	tree _tree;
-
+	allocator_reb alreb;
 
 };
 
