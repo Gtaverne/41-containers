@@ -83,7 +83,7 @@ template < typename Tree>
 void treegenerator(Tree *tr, int len = 20)
 {
 	for (int i = 0 ; i < len; i++)
-		tr->insertValue(ft::make_pair(i - 1, rand() % 1000));
+		tr->insertValue(ft::make_pair(i - len / 2, rand() % 1000));
 }
 
 
@@ -99,10 +99,9 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	anymap tmp;
 	typename anymap::iterator it = mymap.begin();
 	typename anymap::iterator fin(mymap.end());
-	//typename anymap::const_iterator c_it(mymap.begin());
+	typename anymap::const_iterator c_it(mymap.begin());
 	typename anymap::iterator up = ++(++mymap.begin());
-	// typename anymap::const_iterator c_it;
-	// typename anymap::const_iterator c_it2 = mymap.end();
+	typename anymap::const_iterator c_it2 = mymap.end();
 
 	tmp = mymap;
 	paire.first = -10;
@@ -110,7 +109,7 @@ void testerIntMap(anymap &mymap, anypair &paire)
 
 	fin = it;
 	fin = mymap.insert(it, paire);
-	//c_it = it;
+	c_it = it;
 	std::cout << "it->first: " << (it->first) << std::endl;
 	std::cout << "fin->first: " << (fin->first) << std::endl;
 	std::cout << "fin->second: " << (fin->second) << std::endl;
@@ -118,7 +117,7 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	std::cout << "up->second: " << (up->second) << std::endl;
 
 	std::cout << "it == it: " << (it == it) << std::endl;
-	//std::cout << "c_it == c_it2: " << (c_it == c_it2) << std::endl;
+	std::cout << "c_it == c_it2: " << (c_it == c_it2) << std::endl;
 
 
 	anypair tempaire = paire;
@@ -129,10 +128,11 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	//std::cout << "it == c_it: " << (it == c_it) << std::endl;
 
 	// std::cout << "it == fin: " << (it == fin) << std::endl;
-	// while (it != up)
-	// 	it++;
-	// std::cout << "it == tmp: " << (it == up) << std::endl;
-
+	while (it != up)
+		it++;
+	std::cout << "it == tmp: " << (it == up) << std::endl;
+	mymap.erase(it);
+	mymap.erase(mymap.begin(), mymap.end());
 
 }
 

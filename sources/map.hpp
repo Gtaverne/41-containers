@@ -37,7 +37,7 @@ typedef typename tree::reference reference;
 typedef typename tree::const_reference const_reference;
 typedef typename tree::pointer pointer;
 typedef typename tree::const_pointer const_pointer;
-typedef typename ft::map_iterator<const tree> const_iterator; //not yet working
+typedef typename ft::map_iterator<tree> const_iterator; //not yet working
 typedef typename ft::map_iterator<tree> iterator;
 typedef reverse_iterator<const_iterator> const_reverse_iterator; //not yet working
 typedef reverse_iterator<iterator> reverse_iterator; //not yet working
@@ -52,22 +52,22 @@ typedef typename Alloc::template rebind<Node>::other allocator_reb;
 //**********************************************************//
 // Canon                                                    //
 //**********************************************************//
-explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc)
+explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc), _alreb(alloc)
 {}
 
-template <class InputIterator> map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc)
+template <class InputIterator> map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc), _alreb(alloc)
 {
 	this->insert(first, last);
 }
 
-map (const map& x);
+map (const map& x) : _tree(x._tree), _alreb(x._alreb) {}
 
 ~map() {}
 
 map &operator=(const map &rhs)
 {
-	//voir si on veut aussi copier les allocator type
 	_tree = rhs._tree;
+	_alreb = rhs._alreb;
 	return *this;
 }
 
@@ -145,12 +145,30 @@ void insert (InputIterator first, InputIterator last)
 
 
 //erase
-//void erase (iterator position);
-//size_type erase (const key_type& k);
-//void erase (iterator first, iterator last);
+void erase (iterator position) {_tree.deleteKey((*position).first);}
+size_type erase (const key_type& k)
+{
+	if (_tree.finder(k) == 0)
+		return 0;
+	_tree.deleteKey(k);
+	return 1;
+}
+void erase (iterator first, iterator last)
+{
+	while (first != last)
+		erase(first++);
+}
 
 //swap
-//void swap (map& x);
+void swap (map& x)
+{
+	tree tmp(_tree);
+	_tree = x._tree;
+	x._tree = tmp;
+	allocator_reb tempal = _alreb;
+	_alreb = x._alreb;
+	x._alreb = tempal;
+}
 
 //clear
 void clear() {_tree.clear_all();}
@@ -199,11 +217,11 @@ size_type count (const key_type& k) const {return (_tree.find(k) ? 1 : 0);}
 // Get allocator                                            //
 //**********************************************************//
 //get_allocator
-//allocator_type get_allocator() const;
+allocator_type get_allocator() const {return _alreb;}
 
 private :
 	tree _tree;
-	allocator_reb alreb;
+	allocator_reb _alreb;
 
 };
 

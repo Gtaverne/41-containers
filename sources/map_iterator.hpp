@@ -43,8 +43,8 @@ namespace ft
 		virtual ~map_iterator() {};
 		map_iterator & operator=(map_iterator const & rhs) 
 		{
-			this->ptr_iter = rhs.ptr_iter;
-			this->ptr_end = rhs.ptr_end;
+			ptr_iter = rhs.ptr_iter;
+			ptr_end = rhs.ptr_end;
 			key_comp = rhs.key_comp;
 			return *this;
 		}
@@ -70,31 +70,52 @@ namespace ft
 //**********************************************//
 		map_iterator &operator++(void)
 		{
-			if(this->ptr_iter->right)
+			if(ptr_iter->right)
 			{
-				this->ptr_iter = this->ptr_iter->right->nd_Min();
+				ptr_iter = ptr_iter->right->nd_Min();
 				return *this;
 			}
-			else if (this->ptr_iter->parent)
+			else if (ptr_iter->parent)
 			{
 				//std::cout << "Searching in parent node" << std::endl;
-				key_type ref_key = this->ptr_iter->value.first;
-				Node *tmp = this->ptr_iter->parent;
+				key_type ref_key = ptr_iter->value.first;
+				Node *tmp = ptr_iter->parent;
 				while (tmp && this->key_comp(tmp->value.first, ref_key))
 					tmp = tmp->parent;
 				if (tmp)
 				{
-					this->ptr_iter = tmp;
+					ptr_iter = tmp;
 					return *this;
 				}
 			}
-			this->ptr_iter = this->ptr_end;
+			ptr_iter = ptr_end;
 			return *this;
 		}
 
 		map_iterator &operator--(void)
 		{
-			--ptr_iter;
+			if (ptr_iter == ptr_end)
+			{
+				ptr_iter = ptr_iter->parent;
+				return *this;
+			}
+			else if (ptr_iter->left)
+			{
+				ptr_iter = ptr_iter->left->nd_Max();
+				return *this;
+			}
+			else if (ptr_iter->parent)
+			{
+				key_type ref_key = ptr_iter->value.first;
+				Node *tmp = ptr_iter->parent;
+				while(tmp && key_comp(ref_key, tmp->value.first))
+					tmp = tmp->parent;
+				if(tmp)
+				{
+					ptr_iter = tmp;
+					return *this;
+				}
+			}
 			return *this;
 		}
 
@@ -108,7 +129,7 @@ namespace ft
 		map_iterator operator--(int)
 		{
 			map_iterator tmp(*this);
-			--ptr_iter;
+			--(*this);
 			return (tmp);
 		}
 
@@ -116,7 +137,7 @@ namespace ft
 // Basic manips                                 //
 //**********************************************//
 
-		reference operator*(void) const	{return (this->ptr_iter->value);}
+		reference operator*(void) const	{return (ptr_iter->value);}
 		pointer operator->(void) const {return ( &(operator*()));}
 
 	};

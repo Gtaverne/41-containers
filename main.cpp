@@ -72,13 +72,16 @@ std::cout << "***Here comes my tree***" << std::endl;
 		ft::Tree<ft::pair<int, int> > arbol;
 		ft::Tree<ft::pair<int, int> >::Node *tmp_nd;
 
+
 		treegenerator(&arbol, 20);
+		arbol.delete_node(arbol.getRoot(), 20);
+
 
 		std::cout << "Root " << arbol.getRoot()->value.first << " " << arbol.getRoot()->value.second << std::endl;
 		std::cout << "Min " << arbol.getMin()->value.first << " " << arbol.getMin()->value.second << std::endl;
 		std::cout << "Max " << arbol.getMax()->value.first << " " << arbol.getMax()->value.second << std::endl;
 
-		if ((tmp_nd = arbol.finder(20)))
+		if ((tmp_nd = arbol.finder(15)))
 		{
 			std::cout << "FOUND key=15: " << tmp_nd->value.first << " " << tmp_nd->value.second << std::endl;
 			std::cout << "Balance factor of 15: " << arbol.balanceFactor(tmp_nd) << std::endl << std::endl;
@@ -92,9 +95,20 @@ std::cout << "***Here comes my tree***" << std::endl;
 		std::cout << std::endl << "Here is its copy" << std::endl;
 		treecopy.printTree(0);
 
-		std::cout << std::endl << "We want to delete key=5" << std::endl;
-		treecopy.delete_node(treecopy.getRoot(), 5);
+		std::cout << std::endl << "We want to delete key=-4" << std::endl;
+		treecopy.delete_node(treecopy.getRoot(), -4);
 		treecopy.printTree(0);
+
+		std::cout << std::endl << "We want to delete the rest of the tree" << std::endl;
+		for(int i = 20; i > -20 ; i--)
+		{
+			std::cout << "This is the key we delete: " << i << std::endl;
+			treecopy.deleteKey(i);
+		}
+		treecopy.printTree(0);
+	
+
+
 	}
 
 //**********************************************************//
@@ -109,11 +123,6 @@ std::cout << "***Here comes the base case***" << std::endl;
 		mymap.insert(std::pair<int, int>(i + 10, 10 * i));
 	testerIntMap(mymap, tempaire);
 	std::vector<int> vec;
-	for (int i = 0; i < 100 ; i++)
-		vec.push_back(i * 5);
-	std::map<int, std::vector<int> > mapvec;
-	for (int i = 0; i < 10; i++)
-		mapvec.insert(std::pair<int, std::vector<int> >(i + 10, vec));
 	}
 
 std::cout << std::endl << "***Here comes my version***" << std::endl;
@@ -123,11 +132,5 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
 	testerIntMap(mymap, tempaire);
-	ft::vector<int> vec;
-	for (int i = 0; i < 100 ; i++)
-		vec.push_back(i * 5);
-	ft::map<int, ft::vector<int> > mapvec;
-	for (int i = 0; i < 10; i++)
-		mapvec.insert(ft::pair<int, ft::vector<int> >(i + 10, vec));
 	}
 }
