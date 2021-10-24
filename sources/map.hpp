@@ -155,16 +155,20 @@ size_type erase (const key_type& k)
 }
 void erase (iterator first, iterator last)
 {
+	iterator tmp;
 	while (first != last)
-		erase(first++);
+	{
+		tmp = first;
+		erase(tmp);
+		first++;
+	}
 }
 
 //swap
 void swap (map& x)
 {
-	tree tmp(_tree);
-	_tree = x._tree;
-	x._tree = tmp;
+	_tree.swapTree(x._tree);
+
 	allocator_reb tempal = _alreb;
 	_alreb = x._alreb;
 	x._alreb = tempal;

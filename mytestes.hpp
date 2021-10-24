@@ -133,6 +133,14 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	std::cout << "it == tmp: " << (it == up) << std::endl;
 	mymap.erase(it);
 	mymap.erase(mymap.begin(), mymap.end());
+	std::cout << "Is the map really empty: " << mymap.empty() << std::endl;
+	for (int i = 0; i < 10 ; i++)
+	{
+		paire.first = i;
+		paire.second = 15 + i;
+		mymap.insert(paire);
+	}
+	std::cout << "A couple insertions, now len is: " << mymap.size() << std::endl;
 
 }
 

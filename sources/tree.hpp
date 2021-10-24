@@ -98,8 +98,7 @@ public:
 	}
 
 	//copy
-	Tree (const Tree& src)
-	{this = copyNode(src._root); }
+	Tree (const Tree& src) {*this = src;}
 
 	//With an input node
 	Tree (const Node &node, const key_comparator& comp = key_comparator(), const allocator_type& alloc = allocator_type()) : _comp (comp), _alloc_val (alloc)
@@ -527,6 +526,13 @@ size_type sizeNode(Node *node) const
 // Functions for map                                        //
 //**********************************************************//
 size_type size(void) const {return sizeNode(_root);}
+
+void swapTree(Tree &rhs)
+{
+	Node *tmp = _root;
+	_root = rhs._root;
+	rhs._root = tmp;
+}
 
 };
 }

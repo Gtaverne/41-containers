@@ -116,6 +116,10 @@ namespace ft
 					return *this;
 				}
 			}
+			else
+			{
+				ptr_iter = ptr_iter->nd_Min();
+			}
 			return *this;
 		}
 
