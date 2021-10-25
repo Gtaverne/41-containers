@@ -462,18 +462,16 @@ size_type sizeNode(Node *node) const
 		{
 			if(!node->left || !node->right) //2.a
 			{
-				std::cout << "Node leaf" << std::endl;
-				Node *tmp = node;
-				tmp = tmp->left ? tmp->left : tmp->right;
-				if (tmp)
-					tmp->parent = node->parent;
+				Node* tmp = node;
+				node = node->left ? node->left : node->right;
+				if (node)
+					node->parent = tmp->parent;
 				if (node == _root)
 				{
 					_root = tmp;
 				}
-				_alloc_val.destroy(&node->value);
-				_alloc_node.deallocate(node, 1);
-				node = tmp;
+				_alloc_val.destroy(&tmp->value);
+				_alloc_node.deallocate(tmp, 1);
 			}
 			else //2.b
 			{

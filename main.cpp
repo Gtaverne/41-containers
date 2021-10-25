@@ -100,12 +100,12 @@ std::cout << "***Here comes my tree***" << std::endl;
 		treecopy.printTree(0);
 
 		std::cout << std::endl << "We want to delete the rest of the tree" << std::endl;
-		for(int i = 20; i > -20 ; i--)
-		//for(int i = -20; i < 20 ; i++)
-		{
-			std::cout << "This is the key we delete: " << i << std::endl;
-			treecopy.deleteKey(i);
-		}
+		// for(int i = 20; i > -20 ; i--)
+		// for(int i = -20; i < 20 ; i++)
+		// {
+		// 	std::cout << "This is the key we delete: " << i << std::endl;
+		// 	treecopy.deleteKey(i);
+		// }
 		treecopy.printTree(0);
 	
 
@@ -130,16 +130,14 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	{
 	ft::map<int, int> mymap;
 	ft::pair<int, int> tempaire;
-	for (int i = 0; i < 10; i++)
-		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
-	testerIntMap(mymap, tempaire);
-	while (1)
-	{
+	// for (int i = 0; i < 10; i++)
+	// 	mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
+	// testerIntMap(mymap, tempaire);
+
 		tempaire.first = 42;
 		tempaire.second = 1;
 		mymap.insert(tempaire);
 		mymap.erase(tempaire.first);
-	}
 	}
 
 }
