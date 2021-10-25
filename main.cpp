@@ -101,6 +101,7 @@ std::cout << "***Here comes my tree***" << std::endl;
 
 		std::cout << std::endl << "We want to delete the rest of the tree" << std::endl;
 		for(int i = 20; i > -20 ; i--)
+		//for(int i = -20; i < 20 ; i++)
 		{
 			std::cout << "This is the key we delete: " << i << std::endl;
 			treecopy.deleteKey(i);
@@ -132,5 +133,13 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
 	testerIntMap(mymap, tempaire);
+	while (1)
+	{
+		tempaire.first = 42;
+		tempaire.second = 1;
+		mymap.insert(tempaire);
+		mymap.erase(tempaire.first);
 	}
+	}
+
 }

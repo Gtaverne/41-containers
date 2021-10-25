@@ -443,8 +443,8 @@ size_type sizeNode(Node *node) const
 	https://www.geeksforgeeks.org/avl-tree-set-2-deletion/
 	1-You dive until you find the node with _key_
 	2.a-If the keynode has one empty branch below, L or R, you connect the non-empty one to the parent
-	2.b-Find the closest node just superior (getMin(node->right)) and switch it, then we delete it iteratively until you reach 2.a
-	3-You cleanly destroy the node
+	2.b-Find the closest node just inferior (getMax(node->left)) and switch it with node
+	3-You cleanly destroy the initial node
 	4-Balance that tree
 	*/
 	Node *delete_node(Node *node, const key_type key)
@@ -460,49 +460,48 @@ size_type sizeNode(Node *node) const
 			node->right = delete_node(node->right, key);
 		else
 		{
-			// if (node == getMax() && node->parent)
-			// 	node->parent->right = 0;
-			// if (node == getMin() && node->parent)
-			// 	node->parent->left = 0;
-			if (!node->left || !node->right) //2.a
+			if(!node->left || !node->right) //2.a
 			{
-				//std::cerr << "End node deletion*********" << std::endl;
+				std::cout << "Node leaf" << std::endl;
 				Node *tmp = node;
-			
-				node = node->left ? node->left : node->right;
-				/// WE HAVE HUGE LEAKS HERE
-				//_alloc_val.destroy(&tmp->value); //3
-				//_alloc_node.deallocate(tmp, 1);
-
-				tmp = 0;
+				tmp = tmp->left ? tmp->left : tmp->right;
+				if (tmp)
+					tmp->parent = node->parent;
+				if (node == _root)
+				{
+					_root = tmp;
+				}
+				_alloc_val.destroy(&node->value);
+				_alloc_node.deallocate(node, 1);
+				node = tmp;
 			}
 			else //2.b
 			{
-				//std::cerr << "REGULAR DELETION ************" << std::endl;
-				Node *tmp  = getMin(node->right);
+				
+				std::cout << "middle node kill" << std::endl;
+				Node *tmp = getMax(node->left);
 
-				if (tmp != node->right)
+				
+				tmp->parent->right = tmp->left;
+				if (tmp->left)
+					tmp->left->parent = tmp->parent;
+				if (node->left != tmp)
 				{
-					tmp->right = node->right;
-					node->right->parent = tmp;
+					node->left->parent = tmp;
+					tmp->left = node->left;
 				}
-				tmp->left = node->left;
-				node->left->parent = tmp;
-				tmp->parent->left = 0;
-				tmp->parent = node->parent;
-				// destroy it
-				if (_root == node)
+				if (node->right)
 				{
-					//std::cerr << "*******Root deleted*********" << std::endl;
+					node->right->parent = tmp;
+					tmp->right = node->right;
+				}
+				tmp->parent = node->parent;
+				if (node == _root)
+				{
 					_root = tmp;
 				}
-				/// WE HAVE HUGE LEAKS HERE
-				// this->_alloc_val.destroy(&node->value);
-				// node->right = 0;
-				// node->left = 0;
-				// this->_alloc_node.deallocate(node, 1);
-				
-				
+				_alloc_val.destroy(&node->value);
+				_alloc_node.deallocate(node, 1);
 				node = tmp;
 			}
 		}
