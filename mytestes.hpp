@@ -116,7 +116,15 @@ void testerIntMap(anymap &mymap, anypair &paire)
 
 	std::cout << "up->second: " << (up->second) << std::endl;
 
+	
+	fin = it;
+	fin++;
 	std::cout << "it == it: " << (it == it) << std::endl;
+	std::cout << "it != it: " << (it != it) << std::endl;
+	std::cout << "it != fin: " << (it != fin) << std::endl;
+	std::cout << "it == fin: " << (it == fin) << std::endl;
+
+
 	std::cout << "c_it == c_it2: " << (c_it == c_it2) << std::endl;
 
 
@@ -131,7 +139,9 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	while (it != up)
 		it++;
 	std::cout << "it == tmp: " << (it == up) << std::endl;
-	mymap.erase(it);
+
+	mymap.erase(--mymap.end());
+	std::cout << "We killed end" << std::endl;
 	mymap.erase(mymap.begin(), mymap.end());
 	std::cout << "Is the map really empty: " << mymap.empty() << std::endl;
 	for (int i = 0; i < 10 ; i++)

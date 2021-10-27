@@ -100,13 +100,15 @@ std::cout << "***Here comes my tree***" << std::endl;
 		treecopy.printTree(0);
 
 		std::cout << std::endl << "We want to delete the rest of the tree" << std::endl;
-		// for(int i = 20; i > -20 ; i--)
-		// for(int i = -20; i < 20 ; i++)
-		// {
-		// 	std::cout << "This is the key we delete: " << i << std::endl;
-		// 	treecopy.deleteKey(i);
-		// }
+
+		//for(int i = 20; i > -20 ; i--)
+		for(int i = -20; i < 20 ; i++)
+		{
+			std::cout << "This is the key we delete: " << i << std::endl;
+			treecopy.deleteKey(i);
+		}
 		treecopy.printTree(0);
+		std::cout << std::endl << "That was the tree" << std::endl;
 	
 
 
@@ -128,16 +130,30 @@ std::cout << "***Here comes the base case***" << std::endl;
 
 std::cout << std::endl << "***Here comes my version***" << std::endl;
 	{
+	ft::Tree<ft::pair<int, int> > mytree;
 	ft::map<int, int> mymap;
 	ft::pair<int, int> tempaire;
-	// for (int i = 0; i < 10; i++)
-	// 	mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
-	// testerIntMap(mymap, tempaire);
+	for (int i = 0; i < 10; i++)
+	mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
+	testerIntMap (mymap, tempaire);
 
-		tempaire.first = 42;
-		tempaire.second = 1;
-		mymap.insert(tempaire);
-		mymap.erase(tempaire.first);
+	// tempaire.first = 42;
+	// tempaire.second = 1;
+
+	// mytree.insertNode(mytree.getRoot(), tempaire);
+	
+	// mytree.deleteKey(tempaire.first);
+	// mytree.getMax();
+	// std::cout << "getMax ok" << std::endl;
+
+	// mytree.getMin();
+	// std::cout << "getMin ok" << std::endl;
+
+	// std::cout << "It works in a tree, now in a map" << std::endl;
+	// 	mymap.insert(tempaire);
+	// 	mymap.erase(tempaire.first);
+	// std::cout << "Youpie" << std::endl;
+
 	}
 
 }

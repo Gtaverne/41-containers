@@ -77,11 +77,13 @@ namespace ft
 			}
 			else if (ptr_iter->parent)
 			{
-				//std::cout << "Searching in parent node" << std::endl;
+				std::cout << "Searching in parent node" << std::endl;
 				key_type ref_key = ptr_iter->value.first;
 				Node *tmp = ptr_iter->parent;
 				while (tmp && this->key_comp(tmp->value.first, ref_key))
+				{
 					tmp = tmp->parent;
+				}
 				if (tmp)
 				{
 					ptr_iter = tmp;
