@@ -83,7 +83,10 @@ template < typename Tree>
 void treegenerator(Tree *tr, int len = 20)
 {
 	for (int i = 0 ; i < len; i++)
-		tr->insertValue(ft::make_pair(i - len / 2, rand() % 1000));
+	{
+		const int k = i - len / 2;
+		tr->insertValue(ft::make_pair(k, rand() % 1000));
+	}
 }
 
 

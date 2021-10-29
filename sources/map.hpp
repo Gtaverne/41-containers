@@ -20,25 +20,33 @@ public:
 typedef Key key_type;
 typedef T mapped_type;
 typedef ft::pair<const key_type, mapped_type> value_type;
-
-private:
-	typedef Tree<value_type, Compare, Alloc> tree;
-	typedef Tree<const value_type, Compare, Alloc> const_tree;
-	typedef typename tree::Node Node;
-
-
-public:
-
 typedef Compare key_compare;
-typedef typename tree::value_compare value_compare;
 typedef Alloc allocator_type;
 
-typedef typename tree::reference reference;
-typedef typename tree::const_reference const_reference;
-typedef typename tree::pointer pointer;
-typedef typename tree::const_pointer const_pointer;
-typedef typename ft::map_iterator<tree> const_iterator; //not yet working
-typedef typename ft::map_iterator<tree> iterator;
+class value_compare
+{
+public:
+	value_compare() {}
+	value_compare (value_compare const &src) {(void)src;}
+	~value_compare() {}
+
+	value_compare &operator=(const value_compare &) {return *this;}
+
+	bool operator()(const value_type &a, const value_type &b) const
+	{ return (key_compare()(a.first, b.first)); }
+};
+
+private:
+	typedef typename ft::Tree<value_type, value_compare> mytree;
+	typedef typename mytree::node Node;
+
+public:
+typedef typename mytree::reference reference;
+typedef typename mytree::const_reference const_reference;
+typedef typename mytree::pointer pointer;
+typedef typename mytree::const_pointer const_pointer;
+typedef typename ft::map_iterator<mytree> const_iterator; //not yet working
+typedef typename ft::map_iterator<mytree> iterator;
 typedef reverse_iterator<const_iterator> const_reverse_iterator; //not yet working
 typedef reverse_iterator<iterator> reverse_iterator; //not yet working
 
@@ -46,28 +54,34 @@ typedef typename iterator_traits<iterator>::difference_type difference_type;
 typedef size_t size_type;
 
 //Rebinding, check this article http://www.cplusplus.com/reference/memory/allocator/
-typedef typename Alloc::template rebind<Node>::other allocator_reb;
+//typedef typename Alloc::template rebind<Node<value_type> >::other allocator_reb;
 
 
 //**********************************************************//
 // Canon                                                    //
 //**********************************************************//
-explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc), _alreb(alloc)
-{}
-
-template <class InputIterator> map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(comp, alloc), _alreb(alloc)
+explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(), _alloc(alloc)
 {
+	_comp = comp;
+	_value_comp = value_compare();
+}
+
+template <class InputIterator>
+map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(), _alloc(alloc)
+{
+	_comp = comp;
+	_value_comp = value_compare();
 	insert(first, last);
 }
 
-map (const map& x) : _tree(x._tree), _alreb(x._alreb) {}
+map (const map& x) : _tree(x._tree), _alloc(x._alloc) {}
 
 ~map() {}
 
 map &operator=(const map &rhs)
 {
 	_tree = rhs._tree;
-	_alreb = rhs._alreb;
+	_alloc = rhs._alloc;
 	return *this;
 }
 
@@ -108,7 +122,19 @@ size_type max_size() const {return _tree.max_size();}
 // Element access                                           //
 //**********************************************************//
 //[]
-mapped_type& operator[] (const key_type& k) {return _tree[k];}
+mapped_type& operator[] (const key_type& k)
+{
+	Node* res = _tree.finder(ft::make_pair(k, mapped_type()));
+
+	if (res != _tree.end_node())
+		return (res->val.second);
+	else
+	{
+		Node* res2 = _tree.insertValue(ft::make_pair(k, mapped_type()));
+		return (res2->val.second);
+	}
+	
+}
 
 
 //**********************************************************//
@@ -151,7 +177,7 @@ size_type erase (const key_type& k)
 {
 	if (_tree.finder(k) == 0)
 		return 0;
-	_tree.deleteKey(k);
+	_tree._delete_node(ft::make_pair(k, mapped_type()));
 	return 1;
 	
 }
@@ -171,9 +197,9 @@ void swap (map& x)
 {
 	_tree.swapTree(x._tree);
 
-	allocator_reb tempal = _alreb;
-	_alreb = x._alreb;
-	x._alreb = tempal;
+	allocator_type tempal = _alloc;
+	_alloc = x._alloc;
+	x._alloc = tempal;
 }
 
 //clear
@@ -196,7 +222,7 @@ value_compare value_comp() const {return _tree.valcomp();}
 //find
 iterator find (const key_type& k)
 {
-	Node *node = _tree.finder(k);
+	Node *node = _tree.finder(ft::make_pair(k, mapped_type()));
 	if (node)
 		return (iterator(node, _tree.end_node()));
 	return end();
@@ -236,11 +262,13 @@ iterator upper_bound (const key_type& k)
 // Get allocator                                            //
 //**********************************************************//
 //get_allocator
-allocator_type get_allocator() const {return _alreb;}
+allocator_type get_allocator() const {return _alloc;}
 
-	tree _tree;
+	mytree _tree;
 private :
-	allocator_reb _alreb;
+	key_compare _comp;
+	value_compare _value_comp;
+	allocator_type _alloc;
 
 };
 

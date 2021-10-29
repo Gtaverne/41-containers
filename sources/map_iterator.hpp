@@ -22,7 +22,7 @@ namespace ft
 		typedef std::ptrdiff_t difference_type;
 		typedef std::bidirectional_iterator_tag iterator_category;
 
-		typedef typename T::Node Node;
+		typedef typename T::node Node;
 		typedef typename T::key_type key_type;
 		typedef typename T::key_comparator key_comparator;
 	
@@ -70,9 +70,9 @@ namespace ft
 //**********************************************//
 		map_iterator &operator++(void)
 		{
-			if(ptr_iter->right)
+			if(ptr_iter->right != ptr_end)
 			{
-				ptr_iter = ptr_iter->right->nd_Min();
+				ptr_iter = ptr_iter->right->min_nd();
 				return *this;
 			}
 			else if (ptr_iter->parent)
@@ -103,7 +103,7 @@ namespace ft
 			}
 			else if (ptr_iter->left)
 			{
-				ptr_iter = ptr_iter->left->nd_Max();
+				ptr_iter = ptr_iter->left->max_nd();
 				return *this;
 			}
 			else if (ptr_iter->parent)
@@ -120,7 +120,7 @@ namespace ft
 			}
 			else
 			{
-				ptr_iter = ptr_iter->nd_Min();
+				ptr_iter = ptr_iter->min_nd();
 			}
 			return *this;
 		}

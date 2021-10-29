@@ -17,7 +17,21 @@ https://www.programiz.com/dsa/red-black-tree
 namespace ft
 {
 
-template <class T,class Compare = ft::less<typename T::first_type>, class Allocator = std::allocator<T> >
+template <class T>
+struct Node
+{
+	typedef T value_type;
+	bool color; //0 black, 1 red
+	value_type val;
+	Node *left;
+	Node *right;
+	Node *parent;
+
+	Node(value_type const &val) : val(val) {} 
+};
+
+
+template <class T, class Compare, class Allocator = std::allocator<Node<T> > >
 class Tree
 {
 public:
@@ -26,6 +40,8 @@ public:
 	
 	typedef typename T::first_type key_type;
 	typedef typename T::second_type mapped_type;
+	typedef typename ft::Node<value_type> node;
+	typedef node *node_ptr ;
 	typedef Allocator allocator;
 	typedef size_t size_type;
 
@@ -36,16 +52,7 @@ public:
 
 
 public:
-	struct Node
-	{
-		bool color; //0 black, 1 red
-		value_type val;
-		Node *left;
-		Node *right;
-		Node *parent;
 
-		Node(value_type const &val) : val(val) {} 
-	};
 
 	Tree(const allocator alloc = allocator()) : _comp(key_comparator()), _size (0)
 	{
@@ -98,8 +105,8 @@ void swap(Tree &rhs)
 	allocator tempal = rhs._alloc;
 	key_comparator tempcomp = rhs._comp;
 	size_type tempsize = rhs._size;
-	Node *tempnil = rhs.NIL;
-	Node *temproot = rhs._root;
+	node_ptr tempnil = rhs.NIL;
+	node_ptr temproot = rhs._root;
 
 	rhs._alloc = _alloc;
 	_alloc = tempal;
@@ -117,22 +124,31 @@ void swap(Tree &rhs)
 	_root = temproot;
 }
 
+node_ptr end_node() {return NIL;}
 
+node_ptr begin_node() {return min_nd(_root);}
+
+size_type max_size() const {return _alloc.max_size();}
 
 private:
-	Node *_root;
-	Node *NIL;
+	node_ptr _root;
+	node_ptr NIL;
 	key_comparator _comp;
 	allocator _alloc; //to allocate nodes, it has the size of the 3 pointers + the bool + the val
 	size_type _size;
 
-//**********************************************************//
-// Tree Utils                                               //
-//**********************************************************//
+/***********************************************************
+** Tree Utils                                             **
+** - New node, min, max, size                             **
+** - Rotations                                            **
+** - Insertion                                            **
+** - Deletion                                             **
+** - Finding                                              **
+***********************************************************/
 
-	Node *_new_node(value_type const &rawdata)
+	node_ptr _new_node(value_type const &rawdata)
 	{
-		Node *node = _alloc.allocate(1);
+		node_ptr node = _alloc.allocate(1);
 		_alloc.construct(node, rawdata);
 		node->color = RED;
 		node->left = NIL;
@@ -141,6 +157,33 @@ private:
 
 		return node;
 	}
+
+public:
+	node_ptr min_nd(node_ptr nd) const
+	{
+		while (nd->left != NIL)
+			nd = nd->left;
+		return nd;
+	}
+
+	node_ptr max_nd(node_ptr nd) const
+	{
+		while (nd->right != NIL)
+			nd = nd->right;
+		return nd;
+	}
+
+	node_ptr getRoot() const
+	{
+		return _root;
+	}
+
+	size_type size() const
+	{
+		return _size;
+	}
+
+private:
 
 /*
 Left Rotation
@@ -152,9 +195,9 @@ Left Rotation
 */
 
 
-	void _left_rotate(Node *x)
+	void _left_rotate(node_ptr x)
 	{
-		Node *y = x->right;
+		node_ptr y = x->right;
 		x->right = y->left;
 
 		if (y->left != NIL)
@@ -165,7 +208,7 @@ Left Rotation
 		else if (x == x->parent->left)
 			x->parent->left = y;
 		else
-			x->parent->right = y
+			x->parent->right = y;
 		y->left = x;
 		x->parent = y;
 	}
@@ -180,9 +223,9 @@ Right Rotation
 */
 
 
-	void _right_rotate(Node *x)
+	void _right_rotate(node_ptr x)
 	{
-		Node *y = x->left;
+		node_ptr y = x->left;
 		x->left = y->right;
 
 		if (y->right != NIL)
@@ -193,24 +236,40 @@ Right Rotation
 		else if (x == x->parent->right)
 			x->parent->right = y;
 		else
-			x->parent->right = y
+			x->parent->right = y;
 		y->right = x;
 		x->parent = y;
 	}
 
+public:
 	void insertValue(value_type const &value)
 	{
-		Node *node = _new_node(value);
+		node_ptr n = _new_node(value);
 
-		ft::pair<Node *, bool> res = _insert_recursive (root, n);
+		ft::pair<node_ptr , bool> res = _insert_recursive(_root, n);
 		
+		if (res.second)
+		{
+			_size++;
+			if (n->parent == NIL)
+				n->color = BLACK;
+			else
+				_insert_fix(n);
+			_root = n;
+			while (_root->parent != NIL)
+				_root = _root->parent;
+		}
+		else
+		{
+			_alloc.destroy(n);
+			_alloc.deallocate(n, 1);
+		}
 	}
 
-
 //Insert a pair in the tree
-	ft::pair<Node *, bool> _insert_recursive(Node *rt, Node *n)
+	ft::pair<node_ptr , bool> _insert_recursive(node_ptr rt, node_ptr n)
 	{
-		if (root != NIL && _comp(n->val, rt->val))
+		if (rt != NIL && _comp(n->val, rt->val))
 		{
 			if (rt->left != NIL)
 				return _insert_recursive(rt->left, n);
@@ -234,30 +293,204 @@ Right Rotation
 	}
 
 /*
+Insert fixup
 Feel free to check the detail of RBT algo to understand the next function
-
 */
-
-
-//Insert fixup
-	void _insertFix (Node *node)
+	void _insert_fix (node_ptr nd)
 	{
-		Node *tmp;
+		node_ptr unc;
 
-		while (k->parent->color == RED)
+		while (nd->parent->color == RED)
 		{
-			if (k->parent == k->parent->parent->right)
+			if (nd->parent == nd->parent->parent->right)
 			{
-				tmp = k->parent->parent->left; //So uncle
-				if (tmp->color == RED) //Red parent and red uncle :
+				unc = nd->parent->parent->left;
+				if (unc->color == RED) //Red parent and red uncle
 				{
-
+					unc->color = BLACK;
+					nd->parent->color = BLACK;
+					nd->parent->parent->color = RED;
+					nd = nd->parent->parent;
+				}
+				else
+				{
+					if (nd == nd->parent->left)
+					{
+						nd = nd->parent;
+						_right_rotate(nd);
+					}
+					nd->parent->color = BLACK;
+					nd->parent->parent->color = RED;
+					_left_rotate(nd->parent->parent);
 				}
 			}
+			else
+			{
+				unc = nd->parent->parent->right;
+				if (unc->color == RED) //Red parent and red uncle
+				{
+					unc->color = BLACK;
+					nd->parent->color = BLACK;
+					nd->parent->parent->color = RED;
+					nd = nd->parent->parent;
+				}
+				else
+				{
+					if (nd == nd->parent->right)
+					{
+						nd = nd->parent;
+						_left_rotate(nd);
+					}
+					nd->parent->color = BLACK;
+					nd->parent->parent->color = RED;
+					_right_rotate(nd->parent->parent);
+				}
+			}
+			if (nd == _root)
+				break;
 		}
+		_root->color = BLACK;
 	}	
 
-	void _branch_copy(Tree &dest, Node *src, Node *nil_src)
+	void _delete_node(node_ptr z)
+	{
+		node_ptr y = z;
+		node_ptr x;
+		bool y_original_color = y->color;
+		if(z->left == NIL)
+		{
+			x = z->right;
+			_transplant(z, z->right);
+		}
+		else if (z->right == NIL)
+		{
+			x = z->left;
+			_transplant(z, z->left);
+		}
+		else
+		{
+			y = min_nd(z->right);
+			y_original_color = y->color;
+			x = y->right;
+			if (y->parent == z)
+				x->parent = y;
+			else
+			{
+				_transplant(y, y->right);
+				y->right = z->right;
+				y->right->parent = y;
+			}
+			_transplant(z, y);
+			y->left = z->left;
+			y->left->parent = y;
+			y->color = z->color;
+		}
+		_alloc.destroy(z);
+		_alloc.deallocate(z, 1);
+		_size--;
+		if (y_original_color == BLACK)
+			_delete_fix(x);
+	}
+
+	void _delete_fix (node_ptr x)
+	{
+		node_ptr s;
+		while (x != _root && x->color == BLACK)
+		{
+			if (x == x->parent->left)
+			{
+				s = x->parent->right;
+				if (s->color == RED)
+				{
+					s->color = BLACK;
+					x->parent->color = RED;
+					_left_rotate(x->parent);
+					s = x->parent->right;
+				}
+				if (s->left->color == BLACK && s->right->color == BLACK)
+				{
+					s->color = RED;
+					x = x->parent;
+				}
+				else
+				{
+					if (s->right->color == BLACK)
+					{
+						s->left->color = BLACK;
+						s->color = RED;
+						_right_rotate(s);
+						s = x->parent->right;
+					}
+					s->color = x->parent->color;
+					x->parent->color = BLACK;
+					s->right->color = BLACK;
+					_left_rotate(x->parent);
+					x = _root;
+				}
+			}
+			else
+			{
+				s = x->parent->left;
+				if (s->color == RED)
+				{
+					s->color = BLACK;
+					x->parent->color = RED;
+					_right_rotate(x->parent);
+					s = x->parent->right;
+				}
+				if (s->right->clor == BLACK && s->left->color == BLACK)
+				{
+					s->color = RED;
+					x = x->parent;
+				}
+				else
+				{
+					if (s->left->color == BLACK)
+					{
+						s->right->color = BLACK;
+						s->color = RED;
+						_left_rotate(s);
+						s = x->parent->left;
+					}
+					s->color = x->parent->color;
+					x->parent->color = BLACK;
+					s->left->color = BLACK;
+					_right_rotate(x->parent);
+					x = _root;
+				}	
+			}
+		}
+		x->color = BLACK;
+	}
+
+	node_ptr finder(const value_type &val) const
+	{
+		node_ptr current = _root;
+		while (current != NIL)
+		{
+			if (_comp(val, current->val))
+				current = current->left;
+			else if (_comp(current->val, val))
+				current = current->right;
+			else
+				return current;
+		}
+		return NULL;
+	}
+
+	void _transplant(node_ptr src, node_ptr dest)
+	{
+		if (src->parent == NIL)
+			_root = dest;
+		else if (src == src->parent->left)
+			src->parent->left = dest;
+		else
+			src->parent->right = dest;
+		dest->parent = src->parent;
+		
+	}
+
+	void _branch_copy(Tree &dest, node_ptr src, node_ptr nil_src)
 	{
 		if (src != nil_src)
 		{
@@ -267,7 +500,7 @@ Feel free to check the detail of RBT algo to understand the next function
 		}
 	}
 
-	void _branch_clear(Node * x = NULL)
+	void _branch_clear(node_ptr  x = NULL)
 	{
 		if (x == NULL)
 			x = _root;
@@ -280,7 +513,7 @@ Feel free to check the detail of RBT algo to understand the next function
 		}
 	}
 
-}
+};
 }
 
 
