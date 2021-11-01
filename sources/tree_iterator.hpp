@@ -53,10 +53,10 @@ namespace ft
 
 		//As for vector, we must have an overload operator for const iterators
 
-		operator tree_iterator<value_type const > (void) const
-		{
-			return (tree_iterator<value_type const> (node, root, NIL));
-		}
+		// operator tree_iterator<value_type const > (void) const
+		// {
+		// 	return (tree_iterator<value_type const> (node, root, NIL));
+		// }
 
 //**********************************************************//
 // operator                                                 //

@@ -69,12 +69,14 @@ std::cout << "***Here comes my version***" << std::endl;
 std::cout << std::endl << "Map int" << std::endl;
 std::cout << "***Here comes the base case***" << std::endl;
 	{
-	std::map<int, int> mymap;
-	std::pair<int, int> tempaire;
-	for (int i = 0; i < 10; i++)
-		mymap.insert(std::pair<int, int>(i + 10, 10 * i));
-	testerIntMap(mymap, tempaire);
-	std::cout << "tempaire.first " << tempaire.first << std::endl;
+	std::map<int, int> const mymap;
+	std::map<int, int>::iterator it = mymap.begin();
+
+	// std::pair<int, int> tempaire;
+	// for (int i = 0; i < 10; i++)
+	// 	mymap.insert(std::pair<int, int>(i + 10, 10 * i));
+	// testerIntMap(mymap, tempaire);
+	// std::cout << "tempaire.first " << tempaire.first << std::endl;
 
 	}
 

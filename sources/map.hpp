@@ -93,7 +93,7 @@ map &operator=(const map &rhs)
 // Iterator                                                 //
 //**********************************************************//
 //begin
-iterator begin() {return (_tree.begin());}
+iterator begin(){return (_tree.begin());}
 const_iterator begin() const {return (_tree.begin());}
 
 //end
@@ -193,7 +193,7 @@ void erase (iterator first, iterator last)
 //swap
 void swap (map& x)
 {
-	_tree.swapTree(x._tree);
+	_tree.swap(x._tree);
 
 	allocator_type tempal = _alloc;
 	_alloc = x._alloc;

@@ -169,14 +169,15 @@ void erase(iterator it)
 size_type keydeleter(const key_type& k)
 {
 	node_ptr found = value_finder(ft::make_pair(k, mapped_type()));
-	if (found == NULL)
+	if (found == NULL || found == NIL)
 		return 0;
+	_delete_node(found);
 	return 1;
 }
 
+	node_ptr NIL;
 private:
 	node_ptr _root;
-	node_ptr NIL;
 	key_comparator _comp;
 	allocator _alloc; //to allocate nodes, it has the size of the 3 pointers + the bool + the val
 	size_type _size;
@@ -295,7 +296,7 @@ Right Rotation
 		else if (x == x->parent->right)
 			x->parent->right = y;
 		else
-			x->parent->right = y;
+			x->parent->left = y;
 		y->right = x;
 		x->parent = y;
 	}
@@ -452,75 +453,75 @@ Feel free to check the detail of RBT algo to understand the next function
 	}
 
 	void _delete_fix (node_ptr x)
-	{
-		node_ptr s;
-		while (x != _root && x->color == BLACK)
 		{
-			if (x == x->parent->left)
+			node_ptr s;
+			while (x != _root && x->color == BLACK)
 			{
-				s = x->parent->right;
-				if (s->color == RED)
+				if (x == x->parent->left)
 				{
-					s->color = BLACK;
-					x->parent->color = RED;
-					_left_rotate(x->parent);
 					s = x->parent->right;
-				}
-				if (s->left->color == BLACK && s->right->color == BLACK)
-				{
-					s->color = RED;
-					x = x->parent;
-				}
-				else
-				{
-					if (s->right->color == BLACK)
+					if (s->color == RED)
 					{
-						s->left->color = BLACK;
-						s->color = RED;
-						_right_rotate(s);
+						s->color = BLACK;
+						x->parent->color = RED;
+						_left_rotate(x->parent);
 						s = x->parent->right;
 					}
-					s->color = x->parent->color;
-					x->parent->color = BLACK;
-					s->right->color = BLACK;
-					_left_rotate(x->parent);
-					x = _root;
-				}
-			}
-			else
-			{
-				s = x->parent->left;
-				if (s->color == RED)
-				{
-					s->color = BLACK;
-					x->parent->color = RED;
-					_right_rotate(x->parent);
-					s = x->parent->right;
-				}
-				if (s->right->color == BLACK && s->left->color == BLACK)
-				{
-					s->color = RED;
-					x = x->parent;
+					if (s->left->color == BLACK && s->right->color == BLACK)
+					{
+						s->color = RED;
+						x = x->parent;
+					}
+					else
+					{
+						if (s->right->color == BLACK)
+						{
+							s->left->color = BLACK;
+							s->color = RED;
+							_right_rotate(s);
+							s = x->parent->right;
+						}
+						s->color = x->parent->color;
+						x->parent->color = BLACK;
+						s->right->color = BLACK;
+						_left_rotate(x->parent);
+						x = _root;
+					}
 				}
 				else
 				{
-					if (s->left->color == BLACK)
+					s = x->parent->left;
+					if (s->color == RED)
 					{
-						s->right->color = BLACK;
-						s->color = RED;
-						_left_rotate(s);
+						s->color = BLACK;
+						x->parent->color = RED;
+						_right_rotate(x->parent);
 						s = x->parent->left;
 					}
-					s->color = x->parent->color;
-					x->parent->color = BLACK;
-					s->left->color = BLACK;
-					_right_rotate(x->parent);
-					x = _root;
-				}	
+					if (s->right->color == BLACK && s->left->color == BLACK)
+					{
+						s->color = RED;
+						x = x->parent;
+					}
+					else
+					{
+						if (s->left->color == BLACK)
+						{
+							s->right->color = BLACK;
+							s->color = RED;
+							_left_rotate(s);
+							s = x->parent->left;
+						}
+						s->color = x->parent->color;
+						x->parent->color = BLACK;
+						s->left->color = BLACK;
+						_right_rotate(x->parent);
+						x = _root;
+					}
+				}
 			}
+			x->color = BLACK;
 		}
-		x->color = BLACK;
-	}
 
 	node_ptr value_finder(const value_type &val) const
 	{
