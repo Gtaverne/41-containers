@@ -3,6 +3,7 @@
 
 #include "utils.hpp"
 #include "pair.hpp"
+#include "tree_iterator.hpp"
 #include "reverse_iterator.hpp"
 
 #define BLACK 0
@@ -50,6 +51,13 @@ public:
 	typedef value_type* pointer;
 	typedef const value_type* const_pointer;
 
+//for iterators
+	std::ptrdiff_t difference_type;
+	typedef ft::tree_iterator<node> iterator;
+	typedef ft::tree_iterator<node> const_iterator;
+	typedef ft::reverse_iterator<iterator> reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+
 
 public:
 
@@ -80,8 +88,7 @@ public:
 		NIL->color = BLACK;
 
 		_root = NIL;
-		//printree
-		_branch_copy(*this, src.root, src.NIL);
+		_branch_copy(*this, src._root, src.NIL);
 	}
 
 	~Tree()
@@ -92,7 +99,12 @@ public:
 	}
 
 
-
+	Tree &operator=(Tree const src)
+	{
+		_branch_clear();
+		_branch_copy(*this, src._root, src.NIL);
+		return *this;
+	}
 
 
 
@@ -129,6 +141,13 @@ node_ptr end_node() {return NIL;}
 node_ptr begin_node() {return min_nd(_root);}
 
 size_type max_size() const {return _alloc.max_size();}
+
+void clear()
+{
+	_branch_clear(_root);
+	_root = NIL;
+	_size = 0;
+}
 
 private:
 	node_ptr _root;
@@ -182,6 +201,21 @@ public:
 	{
 		return _size;
 	}
+
+	void printTree(node_ptr node, int i = 0)
+	{
+		if (!node && i == 0 && _root)
+			printTree(_root);
+		else if (node != NIL)
+		{
+			std::cout << "Depth: " << i << " Key: " << node->val.first << " value: " << node->val.second << std::endl;
+			if (node->left)
+				printTree(node->left, i + 1);
+			if (node->right)
+				printTree(node->right, i + 1);
+		}
+	}
+
 
 private:
 
@@ -495,7 +529,7 @@ Feel free to check the detail of RBT algo to understand the next function
 		if (src != nil_src)
 		{
 			_branch_copy(dest, src->left, nil_src);
-			dest.insert(src->val);
+			dest.insertValue(src->val);
 			_branch_copy(dest, src->right, nil_src);
 		}
 	}
@@ -512,6 +546,43 @@ Feel free to check the detail of RBT algo to understand the next function
 			_alloc.deallocate(x, 1);
 		}
 	}
+
+//**********************************************************//
+// Iterators                                                //
+//**********************************************************//
+
+	iterator begin(void) {return iterator(min_nd(_root), _root, NIL);}
+	const_iterator begin(void) const {return iterator(min_nd(_root), _root, NIL);}
+	iterator end(void) {return iterator(NIL, _root, NIL);}
+	const_iterator end(void) const {return iterator(NIL, _root, NIL);}
+
+	reverse_iterator rbegin(void)
+	{
+		iterator it = end();
+		return reverse_iterator(it);
+	}
+
+	const_reverse_iterator rbegin(void) const
+	{
+		const_iterator it = end();
+		return const_reverse_iterator(it);
+	}
+
+	reverse_iterator rend(void)
+	{
+		iterator it = begin();
+		return reverse_iterator(it);
+	}
+
+	const_reverse_iterator rend(void) const 
+	{
+		const_iterator it = begin();
+		return const_reverse_iterator(it);
+	}
+
+
+
+
 
 };
 }

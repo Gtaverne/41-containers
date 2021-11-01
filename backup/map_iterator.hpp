@@ -1,5 +1,5 @@
-#ifndef MAP_ITERATOR_HPP
-#define MAP_ITERATOR_HPP
+#ifndef TREE_ITERATOR_HPP
+#define TREE_ITERATOR_HPP
 
 //#include "tree.hpp"
 
@@ -13,7 +13,7 @@ namespace ft
 	//Check here the possible operations
 
 	template<class T>
-	class map_iterator 
+	class tree_iterator 
 	{
 	public:
 		typedef T value_type;
@@ -38,10 +38,10 @@ namespace ft
 //**********************************************//
 // Canon, constructors and casting              //
 //**********************************************//
-		map_iterator(void) : ptr_iter(NULL), ptr_end(NULL) {}
-		map_iterator(const map_iterator &src) : ptr_iter(src.ptr_iter), ptr_end(src.ptr_end), key_comp(src.key_comp) {}
-		virtual ~map_iterator() {};
-		map_iterator & operator=(map_iterator const & rhs) 
+		tree_iterator(void) : ptr_iter(NULL), ptr_end(NULL) {}
+		tree_iterator(const tree_iterator &src) : ptr_iter(src.ptr_iter), ptr_end(src.ptr_end), key_comp(src.key_comp) {}
+		virtual ~tree_iterator() {};
+		tree_iterator & operator=(tree_iterator const & rhs) 
 		{
 			ptr_iter = rhs.ptr_iter;
 			ptr_end = rhs.ptr_end;
@@ -49,10 +49,10 @@ namespace ft
 			return *this;
 		}
 
-		map_iterator(Node* nd, Node* end): ptr_iter(nd), ptr_end(end) {};
+		tree_iterator(Node* nd, Node* end): ptr_iter(nd), ptr_end(end) {};
 
 		
-		// operator map_iterator<const value_type>() const
+		// operator tree_iterator<const value_type>() const
 		// {
 		// 	std::cerr << "Map iterrator casting to const" << std::endl;
 		// 	return this;
@@ -61,18 +61,18 @@ namespace ft
 //**********************************************//
 // Logical comparison operators                 //
 //**********************************************//
-		// bool operator==(const map_iterator &rhs) const {return ptr_iter == rhs.ptr_iter;}
-		// bool operator!=(const map_iterator &rhs) const {return ptr_iter != rhs.ptr_iter;}
+		// bool operator==(const tree_iterator &rhs) const {return ptr_iter == rhs.ptr_iter;}
+		// bool operator!=(const tree_iterator &rhs) const {return ptr_iter != rhs.ptr_iter;}
 
 
 //**********************************************//
 // Incrementations                              //
 //**********************************************//
-		map_iterator &operator++(void)
+		tree_iterator &operator++(void)
 		{
 			if(ptr_iter->right != ptr_end)
 			{
-				ptr_iter = ptr_iter->right->min_nd();
+				ptr_iter = min_nd(ptr_iter->right);
 				return *this;
 			}
 			else if (ptr_iter->parent)
@@ -94,7 +94,7 @@ namespace ft
 			return *this;
 		}
 
-		map_iterator &operator--(void)
+		tree_iterator &operator--(void)
 		{
 			if (ptr_iter == ptr_end)
 			{
@@ -103,7 +103,7 @@ namespace ft
 			}
 			else if (ptr_iter->left)
 			{
-				ptr_iter = ptr_iter->left->max_nd();
+				ptr_iter = max_nd(ptr_iter->left);
 				return *this;
 			}
 			else if (ptr_iter->parent)
@@ -120,21 +120,21 @@ namespace ft
 			}
 			else
 			{
-				ptr_iter = ptr_iter->min_nd();
+				ptr_iter = min_nd(ptr_iter);
 			}
 			return *this;
 		}
 
-		map_iterator operator++(int)
+		tree_iterator operator++(int)
 		{
-			map_iterator tmp(*this);
+			tree_iterator tmp(*this);
 			++(*this);
 			return (tmp);
 		}
 
-		map_iterator operator--(int)
+		tree_iterator operator--(int)
 		{
-			map_iterator tmp(*this);
+			tree_iterator tmp(*this);
 			--(*this);
 			return (tmp);
 		}
@@ -166,22 +166,22 @@ namespace ft
 //**********************************************//
 
 template <typename Iter1, typename Iter2>
-bool operator==(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return (lhs.base() == rhs.base() && lhs.end() == rhs.end());};
+bool operator==(const tree_iterator<Iter1>& lhs, const tree_iterator<Iter2>& rhs) {return (lhs.base() == rhs.base() && lhs.end() == rhs.end());};
 
 template <typename Iter1, typename Iter2>
-bool operator!=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return (!(lhs == rhs));};
+bool operator!=(const tree_iterator<Iter1>& lhs, const tree_iterator<Iter2>& rhs) {return (!(lhs == rhs));};
 
 // template <typename Iter1, typename Iter2>
-// bool operator<(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.base() < rhs.base();};
+// bool operator<(const tree_iterator<Iter1>& lhs, const tree_iterator<Iter2>& rhs) {return lhs.base() < rhs.base();};
 
 // template <typename Iter1, typename Iter2>
-// bool operator>(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.base() > rhs.base();};
+// bool operator>(const tree_iterator<Iter1>& lhs, const tree_iterator<Iter2>& rhs) {return lhs.base() > rhs.base();};
 
 // template <typename Iter1, typename Iter2>
-// bool operator<=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.base() <= rhs.base();};
+// bool operator<=(const tree_iterator<Iter1>& lhs, const tree_iterator<Iter2>& rhs) {return lhs.base() <= rhs.base();};
 
 // template <typename Iter1, typename Iter2>
-// bool operator>=(const map_iterator<Iter1>& lhs, const map_iterator<Iter2>& rhs) {return lhs.base() >= rhs.base();};
+// bool operator>=(const tree_iterator<Iter1>& lhs, const tree_iterator<Iter2>& rhs) {return lhs.base() >= rhs.base();};
 
 
 }

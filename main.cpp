@@ -74,7 +74,8 @@ std::cout << "***Here comes the base case***" << std::endl;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(std::pair<int, int>(i + 10, 10 * i));
 	testerIntMap(mymap, tempaire);
-	std::vector<int> vec;
+	std::cout << "tempaire.first " << tempaire.first << std::endl;
+
 	}
 
 std::cout << std::endl << "***Here comes my version***" << std::endl;
@@ -82,7 +83,8 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	ft::map<int, int> mymap;
 	ft::pair<int, int> tempaire;
 	for (int i = 0; i < 10; i++)
-	mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
+		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
+	//mymap._tree.printTree(mymap._tree.getRoot());
 	testerIntMap (mymap, tempaire);
 
 	// tempaire.first = 42;
@@ -100,8 +102,11 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	// std::cout << "It works in a tree, now in a map" << std::endl;
 	// 	mymap.insert(tempaire);
 	// 	mymap.erase(tempaire.first);
-	// std::cout << "Youpie" << std::endl;
+	std::cout << "Youpie" << std::endl;
+	std::cout << "mymap.begin().first " << mymap.begin()->first << std::endl;
+	std::cout << "tempaire.first " << tempaire.first << std::endl;
 
 	}
+	std::cout << "Where does it crash?" << std::endl;
 
 }
