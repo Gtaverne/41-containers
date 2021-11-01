@@ -103,8 +103,9 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	typename anymap::iterator it = mymap.begin();
 	typename anymap::iterator fin(mymap.end());
 	typename anymap::const_iterator c_it(mymap.begin());
-	typename anymap::reverse_iterator up =  ++(++mymap.rbegin());
-	typename anymap::const_reverse_iterator c_it2 = mymap.rend();
+	typename anymap::iterator up =  ++(++mymap.begin());
+	typename anymap::reverse_iterator r_it = mymap.rend();
+	typename anymap::const_reverse_iterator c_r_it = mymap.rend();
 
 	std::cout << "Iterators exist" << std::endl;
 
@@ -130,31 +131,31 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	std::cout << "it == fin: " << (it == fin) << std::endl;
 
 
-	std::cout << "up == c_it2: " << (up == c_it2) << std::endl;
+	std::cout << "r_it == c_r_it: " << (r_it == c_r_it) << std::endl;
 
 
-	// anypair tempaire = paire;
-	// tempaire.first = 42;
-	// tempaire.second = 84;
+	anypair tempaire = paire;
+	tempaire.first = 42;
+	tempaire.second = 84;
 
-	// std::cout << "it == it: " << (it == it) << std::endl;
-	// std::cout << "it == c_it: " << (it == c_it) << std::endl;
+	std::cout << "it == it: " << (it == it) << std::endl;
+	std::cout << "it == c_it: " << (it == c_it) << std::endl;
 
-	// std::cout << "it == fin: " << (it == fin) << std::endl;
-	// while (it != up)
-	// 	it++;
-	// std::cout << "it == tmp: " << (it == up) << std::endl;
+	std::cout << "it == fin: " << (it == fin) << std::endl;
+	while (it != up)
+		it++;
+	std::cout << "it == tmp: " << (it == up) << std::endl;
 
-	// mymap.erase(--mymap.end());
-	// std::cout << "We killed end" << std::endl;
-	// mymap.erase(mymap.begin(), mymap.end());
-	// std::cout << "Is the map really empty: " << mymap.empty() << std::endl;
-	// for (int i = 0; i < 10 ; i++)
-	// {
-	// 	paire.first = i;
-	// 	paire.second = 15 + i;
-	// 	mymap.insert(paire);
-	// }
+	mymap.erase(--mymap.end());
+	std::cout << "We killed end" << std::endl;
+	mymap.erase(mymap.begin(), mymap.end());
+	std::cout << "Is the map really empty: " << mymap.empty() << std::endl;
+	for (int i = 0; i < 10 ; i++)
+	{
+		paire.first = i;
+		paire.second = 15 + i;
+		mymap.insert(paire);
+	}
 	std::cout << "A couple insertions, now len is: " << mymap.size() << std::endl;
 
 }

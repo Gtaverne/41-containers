@@ -126,17 +126,17 @@ size_type max_size() const {return _tree.max_size();}
 //[]
 mapped_type& operator[] (const key_type& k)
 {
-	Node* res = _tree.finder(ft::make_pair(k, mapped_type()));
-
-	if (res != _tree.end_node())
-		return (res->val.second);
+	value_type temp_val = ft::make_pair(k, mapped_type());
+	iterator iter = _tree.iter_finder(temp_val);
+	if (iter != end())
+		return (iter.node->val.second);
 	else
 	{
-		_tree.insertValue(ft::make_pair(k, mapped_type()));
-		return (_tree.finder(ft::make_pair(k, mapped_type()))->val.second);
+		_tree.insertValue(temp_val);
+		return (_tree.iter_finder(temp_val).node->val.second);
 	}
+	
 }
-
 
 //**********************************************************//
 // Modifiers                                                //
@@ -172,14 +172,11 @@ void insert (InputIterator first, InputIterator last)
 
 
 //erase
-void erase (iterator position) {_tree._delete_node((*position).first);}
+void erase (iterator position) {_tree.erase(position);}
 
 size_type erase (const key_type& k)
 {
-	if (_tree.finder(k) == 0)
-		return 0;
-	_tree._delete_node(ft::make_pair(k, mapped_type()));
-	return 1;
+	return _tree.keydeleter(k);
 }
 
 void erase (iterator first, iterator last)
@@ -223,10 +220,7 @@ value_compare value_comp() const {return _value_comp;}
 //find
 iterator find (const key_type& k)
 {
-	Node *node = _tree.finder(ft::make_pair(k, mapped_type()));
-	if (node)
-		return (iterator(node, _tree.getRoot(), _tree.max_nd(_tree.getRoot())->right));
-	return end();
+	return (_tree.iter_finder(ft::make_pair(k, mapped_type())));
 }
 // const_iterator find (const key_type& k) const;
 
@@ -265,8 +259,8 @@ pair<iterator,iterator>             equal_range (const key_type& k);
 //get_allocator
 allocator_type get_allocator() const {return _alloc;}
 
-	mytree _tree;
 private:
+	mytree _tree;
 	key_compare _comp;
 	value_compare _value_comp;
 	allocator_type _alloc;

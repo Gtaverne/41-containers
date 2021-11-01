@@ -142,11 +142,36 @@ node_ptr begin_node() {return min_nd(_root);}
 
 size_type max_size() const {return _alloc.max_size();}
 
+iterator iter_finder (value_type const &value)
+{
+	node_ptr found = value_finder(value);
+
+	if (!found)
+		return end();
+	else
+		return iterator(found, _root, NIL);
+}
+
+
+
 void clear()
 {
 	_branch_clear(_root);
 	_root = NIL;
 	_size = 0;
+}
+
+void erase(iterator it)
+{
+	_delete_node(it.node);
+}
+
+size_type keydeleter(const key_type& k)
+{
+	node_ptr found = value_finder(ft::make_pair(k, mapped_type()));
+	if (found == NULL)
+		return 0;
+	return 1;
 }
 
 private:
@@ -472,7 +497,7 @@ Feel free to check the detail of RBT algo to understand the next function
 					_right_rotate(x->parent);
 					s = x->parent->right;
 				}
-				if (s->right->clor == BLACK && s->left->color == BLACK)
+				if (s->right->color == BLACK && s->left->color == BLACK)
 				{
 					s->color = RED;
 					x = x->parent;
@@ -497,7 +522,7 @@ Feel free to check the detail of RBT algo to understand the next function
 		x->color = BLACK;
 	}
 
-	node_ptr finder(const value_type &val) const
+	node_ptr value_finder(const value_type &val) const
 	{
 		node_ptr current = _root;
 		while (current != NIL)
