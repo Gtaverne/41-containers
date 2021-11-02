@@ -26,7 +26,7 @@ namespace ft
 //**********************************************//
 // Canon, constructors and casting              //
 //**********************************************//
-		reverse_iterator(void) : _raw_iter(NULL) {};
+		reverse_iterator(void) : _raw_iter() {};
 		explicit reverse_iterator(iterator_type it): _raw_iter(it) {};
 		template< class anyIter>
 		reverse_iterator(const reverse_iterator<anyIter>& src): _raw_iter(src.base()) {};

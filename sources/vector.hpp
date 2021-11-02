@@ -212,7 +212,7 @@ void reserve (size_type n)
 // Modifiers                                    //
 //**********************************************//
 
-// assign BIEN COMPRENDRE LE ENABLE IF
+// assign
 template <class InputIterator>
 void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type* = NULL)
 {

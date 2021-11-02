@@ -63,27 +63,40 @@ public:
 //**********************************************************//
 explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree()
 {
-	_alloc = alloc;
 	_comp = comp;
 	_value_comp = value_compare();
+	_alloc = alloc;
 }
 
 template <class InputIterator>
 map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree()
 {
-	_alloc = alloc;
 	_comp = comp;
 	_value_comp = value_compare();
+	_alloc = alloc;
 	insert(first, last);
 }
 
-map (const map& x) : _tree(x._tree), _alloc(x._alloc), _comp(x._comp), _value_comp(x._value_comp) {}
+map (const map& src)
+{
+	_tree = src._tree;
+	_comp = src._comp;
+	_value_comp = src._value_comp;
+	_alloc = src._alloc;
+}
 
 ~map() {}
 
 map &operator=(const map &rhs)
 {
+	if (*this == rhs)
+	{
+		std::cout << "We are here" << std::endl;
+		return *this;
+	}
 	_tree = rhs._tree;
+	_comp = rhs._comp;
+	_value_comp = rhs._value_comp;
 	_alloc = rhs._alloc;
 	return *this;
 }
@@ -93,20 +106,21 @@ map &operator=(const map &rhs)
 // Iterator                                                 //
 //**********************************************************//
 //begin
-iterator begin(){return (_tree.begin());}
+
 const_iterator begin() const {return (_tree.begin());}
+iterator begin() {return (_tree.begin());}
 
 //end
-iterator end() {return (_tree.end());}
 const_iterator end() const {return (_tree.end());}
+iterator end() {return (_tree.end());}
 
 //rbegin
-reverse_iterator rbegin() {return (_tree.rbegin());}
 const_reverse_iterator rebegin() const {(_tree.rbegin());}
+reverse_iterator rbegin() {return (_tree.rbegin());}
 
 //rend
-reverse_iterator rend() {return (_tree.rend());}
 const_reverse_iterator rend() const {(_tree.rend());}
+reverse_iterator rend() {return (_tree.rend());}
 
 //**********************************************************//
 // Capacity                                                 //
@@ -141,7 +155,7 @@ mapped_type& operator[] (const key_type& k)
 //**********************************************************//
 // Modifiers                                                //
 //**********************************************************//
-// //insert
+//insert
 pair<iterator,bool> insert (const value_type& val)
 {
 	size_type n = size();
@@ -267,6 +281,19 @@ private:
 
 };
 
+//**********************************************************//
+// Non member functions, comparators                        //
+//**********************************************************//
+
+template< class T, class Key, class Alloc, class Compare >
+bool operator==(const ft::map<Key, T, Compare, Alloc> &map1, const ft::map<Key, T, Compare, Alloc> &map2)
+{
+	if (map1.size() != map2.size())
+		return false;
+	bool res = ft::equal(map1.begin(), map1.end(), map2.begin(), map1.value_comp());
+	std::cout << "Bool: " << res << std::endl;
+	return (res);
+} 
 
 }
 

@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <cstddef>
+#include <iostream>
 
 #ifdef __APPLE__
 #include <stdint.h>

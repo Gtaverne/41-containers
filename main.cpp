@@ -69,14 +69,16 @@ std::cout << "***Here comes my version***" << std::endl;
 std::cout << std::endl << "Map int" << std::endl;
 std::cout << "***Here comes the base case***" << std::endl;
 	{
-	std::map<int, int> const mymap;
-	std::map<int, int>::iterator it = mymap.begin();
+	std::map<int, int> mymap;
+	std::pair<int, int> tempaire;
 
-	// std::pair<int, int> tempaire;
-	// for (int i = 0; i < 10; i++)
-	// 	mymap.insert(std::pair<int, int>(i + 10, 10 * i));
-	// testerIntMap(mymap, tempaire);
-	// std::cout << "tempaire.first " << tempaire.first << std::endl;
+	std::map<int, int>::iterator it = mymap.begin();
+	it = mymap.end();
+
+	for (int i = 0; i < 10; i++)
+		mymap.insert(std::pair<int, int>(i + 10, 10 * i));
+	testerIntMap(mymap, tempaire);
+	std::cout << "tempaire.first " << tempaire.first << std::endl;
 
 	}
 
@@ -84,6 +86,9 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	{
 	ft::map<int, int> mymap;
 	ft::pair<int, int> tempaire;
+	ft::map<int, int>::iterator it = mymap.begin();
+	it = mymap.begin();
+	it->second = 12;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
 	//mymap._tree.printTree(mymap._tree.getRoot());
@@ -109,6 +114,5 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	std::cout << "tempaire.first " << tempaire.first << std::endl;
 
 	}
-	std::cout << "Where does it crash?" << std::endl;
 
 }

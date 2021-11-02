@@ -15,7 +15,7 @@ namespace ft
 	//https://www.cplusplus.com/reference/iterator/BidirectionalIterator/
 	//Check here the possible operations
 
-	template<class Node>
+	template<class T, class Node>
 	class tree_iterator 
 	{
 	public:
@@ -35,12 +35,12 @@ namespace ft
 // Canon                                                    //
 //**********************************************************//
 
-		tree_iterator(void) : node(NULL), root(NULL), NIL(NULL) {}
+		tree_iterator() : node(), root(), NIL() {}
 
 		tree_iterator(node_ptr node, node_ptr root, node_ptr NIL) : node(node), root(root), NIL(NIL) {}
 
 		tree_iterator(const tree_iterator &src) : node(src.node), root(src.root), NIL(src.NIL) {}
-
+		
 		~tree_iterator (void) {}
 
 		tree_iterator &operator=(tree_iterator const &src)
@@ -52,11 +52,11 @@ namespace ft
 		}
 
 		//As for vector, we must have an overload operator for const iterators
-
-		// operator tree_iterator<value_type const > (void) const
-		// {
-		// 	return (tree_iterator<value_type const> (node, root, NIL));
-		// }
+		operator tree_iterator<value_type const > (void) const
+		{
+			std::cout << "Yes we cast" << std::endl;
+			return (tree_iterator<value_type const> (node, root, NIL));
+		}
 
 //**********************************************************//
 // operator                                                 //
@@ -65,17 +65,17 @@ namespace ft
 //map's underlying structure is a tree, so the memory location might not be contiguous:
 // >, >=, <, <= make no sense
 
-		bool operator==(const tree_iterator &rhs) const {return node == rhs.node;}
-		bool operator!=(const tree_iterator &rhs) const {return node != rhs.node;}
+		friend bool operator==(const tree_iterator &lhs, const tree_iterator &rhs) {return lhs.node == rhs.node;}
+		friend bool operator!=(const tree_iterator &lhs, const tree_iterator &rhs) {return lhs.node != rhs.node;}
 
 //**********************************************************//
 // Dereferencing                                            //
 //**********************************************************//
 
-		reference operator*(void) {return (node->val);}
-		const_reference operator*(void) const {return (node->val);}
-		pointer operator->(void) {return ( &(operator*()));}
-		const_pointer operator->(void) const {return ( &(operator*()));}
+		reference operator*(void) const {return (node->val);}
+		//const_reference operator*(void) const {return (node->val);}
+		pointer operator->(void) const {return ( &(operator*()));}
+		//const_pointer operator->(void) const {return ( &(operator*()));}
 
 //**********************************************************//
 // Incrementations                                          //
