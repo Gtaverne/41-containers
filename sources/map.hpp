@@ -243,7 +243,7 @@ size_type count (const key_type& k) const
 	return (1);
 }
 
-// //lower_bound
+//lower_bound
 iterator lower_bound (const key_type& k)
 {
 	for (iterator tmp = begin(); tmp != end(); tmp++)
@@ -251,9 +251,15 @@ iterator lower_bound (const key_type& k)
 			return tmp;
 	return end();
 }
-// // const_iterator lower_bound (const key_type& k) const;
+const_iterator lower_bound (const key_type& k) const
+{
+	for (const_iterator tmp = begin(); tmp != end(); tmp++)
+		if (!(key_comp()(tmp->first, k)))
+			return tmp;
+	return end();
+}
 
-// //upper bound
+//upper bound
 iterator upper_bound (const key_type& k)
 {
 	for (iterator tmp = begin(); tmp != end(); tmp++)
@@ -261,12 +267,29 @@ iterator upper_bound (const key_type& k)
 			return tmp;
 	return end();
 }
-
-// const_iterator upper_bound (const key_type& k) const;
+const_iterator upper_bound (const key_type& k) const
+{
+	for (const_iterator tmp = begin(); tmp != end(); tmp++)
+		if ((key_comp()(k, tmp->first)))
+			return tmp;
+	return end();
+}
 
 //equal range
-pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
-pair<iterator,iterator>             equal_range (const key_type& k);
+pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+{
+	ft::pair<const_iterator, const_iterator> res;
+	res.first = lower_bound(k);
+	res.second = upper_bound(k);
+	return (res);
+}
+pair<iterator,iterator>             equal_range (const key_type& k)
+{
+	ft::pair<iterator, iterator> res;
+	res.first = lower_bound(k);
+	res.second = upper_bound(k);
+	return (res);
+}
 
 
 //**********************************************************//
