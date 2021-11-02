@@ -15,7 +15,7 @@ namespace ft
 	//https://www.cplusplus.com/reference/iterator/BidirectionalIterator/
 	//Check here the possible operations
 
-	template<class T, class Node>
+	template<class Node>
 	class tree_iterator 
 	{
 	public:
@@ -72,10 +72,10 @@ namespace ft
 // Dereferencing                                            //
 //**********************************************************//
 
-		reference operator*(void) const {return (node->val);}
-		//const_reference operator*(void) const {return (node->val);}
-		pointer operator->(void) const {return ( &(operator*()));}
-		//const_pointer operator->(void) const {return ( &(operator*()));}
+		reference operator*(void) {return (node->val);}
+		const_reference operator*(void) const {return (node->val);}
+		pointer operator->(void) {return ( &(operator*()));}
+		const_pointer operator->(void) const {return ( &(operator*()));}
 
 //**********************************************************//
 // Incrementations                                          //

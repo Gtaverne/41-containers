@@ -79,21 +79,15 @@ map (InputIterator first, InputIterator last, const key_compare& comp = key_comp
 
 map (const map& src)
 {
-	_tree = src._tree;
-	_comp = src._comp;
-	_value_comp = src._value_comp;
-	_alloc = src._alloc;
+	*this = src;
 }
 
 ~map() {}
 
 map &operator=(const map &rhs)
 {
-	if (*this == rhs)
-	{
-		std::cout << "We are here" << std::endl;
+	if (this == &rhs)
 		return *this;
-	}
 	_tree = rhs._tree;
 	_comp = rhs._comp;
 	_value_comp = rhs._value_comp;
@@ -236,10 +230,18 @@ iterator find (const key_type& k)
 {
 	return (_tree.iter_finder(ft::make_pair(k, mapped_type())));
 }
-// const_iterator find (const key_type& k) const;
+const_iterator find (const key_type& k) const
+{
+	return (_tree.iter_finder(ft::make_pair(k, mapped_type())));
+}
 
 //count
-size_type count (const key_type& k) const {return (_tree.find(k) ? 1 : 0);}
+size_type count (const key_type& k) const
+{
+	if (find(k) == end())
+		return (0);
+	return (1);
+}
 
 // //lower_bound
 iterator lower_bound (const key_type& k)
@@ -290,10 +292,42 @@ bool operator==(const ft::map<Key, T, Compare, Alloc> &map1, const ft::map<Key, 
 {
 	if (map1.size() != map2.size())
 		return false;
-	bool res = ft::equal(map1.begin(), map1.end(), map2.begin(), map1.value_comp());
-	std::cout << "Bool: " << res << std::endl;
-	return (res);
+	typename ft::map<Key, T, Compare, Alloc>::const_iterator r_cit = map2.begin();
+	for (typename ft::map<Key,T,Compare,Alloc>::const_iterator l_cit = map1.begin(); l_cit != map1.end(); l_cit++, r_cit++)
+		if (*l_cit != *r_cit)
+			return 0;
+	return 1;
 } 
+
+template< class T, class Key, class Alloc, class Compare >
+bool operator!=(const ft::map<Key, T, Compare, Alloc> &map1, const ft::map<Key, T, Compare, Alloc> &map2)
+{
+	return (!(map1 == map2));
+}
+
+template< class T, class Key, class Alloc, class Compare >
+bool operator<(const ft::map<Key, T, Compare, Alloc> &map1, const ft::map<Key, T, Compare, Alloc> &map2)
+{
+	return (ft::lexicographical_compare(map1.begin(), map1.end(), map2.begin(), map2.end()));
+}
+
+template< class T, class Key, class Alloc, class Compare >
+bool operator<=(const ft::map<Key, T, Compare, Alloc> &map1, const ft::map<Key, T, Compare, Alloc> &map2)
+{
+	return (!(map2 < map1));
+}
+
+template< class T, class Key, class Alloc, class Compare >
+bool operator>(const ft::map<Key, T, Compare, Alloc> &map1, const ft::map<Key, T, Compare, Alloc> &map2)
+{
+	return ((map2 < map1));
+}
+
+template< class T, class Key, class Alloc, class Compare >
+bool operator>=(const ft::map<Key, T, Compare, Alloc> &map1, const ft::map<Key, T, Compare, Alloc> &map2)
+{
+	return (!(map1 < map2));
+}
 
 }
 

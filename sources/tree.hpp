@@ -93,15 +93,15 @@ public:
 
 	~Tree()
 	{
-		_branch_clear();
+		clear();
 		_alloc.destroy(NIL);
 		_alloc.deallocate(NIL, 1);
 	}
 
 
-	Tree &operator=(Tree const src)
+	Tree &operator=(Tree const &src)
 	{
-		_branch_clear();
+		clear();
 		_branch_copy(*this, src._root, src.NIL);
 		return *this;
 	}
@@ -151,7 +151,15 @@ iterator iter_finder (value_type const &value)
 		return iterator(found, _root, NIL);
 }
 
+const_iterator iter_finder (value_type const &value) const
+{
+	node_ptr found = value_finder(value);
 
+	if (!found)
+		return end();
+	else
+		return iterator(found, _root, NIL);
+}
 
 void clear()
 {
