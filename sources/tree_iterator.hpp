@@ -62,11 +62,12 @@ namespace ft
 //**********************************************************//
 // Dereferencing                                            //
 //**********************************************************//
+		
+	reference operator*(void) const {return (node->val);}
+	pointer operator->(void) const {return ( &(operator*()));}
 
-		reference operator*(void) const {return (node->val);}
-		//const_reference operator*(void) const {return (node->val);}
-		pointer operator->(void) const {return ( &(operator*()));}
-		//const_pointer operator->(void) const {return ( &(operator*()));}
+	reference operator*(void) {return (node->val);}
+	pointer operator->(void) {return ( &(operator*()));}
 
 //**********************************************************//
 // Incrementations                                          //
@@ -173,8 +174,8 @@ namespace ft
 		typedef Node value_type;
 		typedef value_type *node_ptr;
 		typedef typename Node::value_type data_type; //const?
-		typedef data_type &reference;
-		typedef data_type *pointer;
+		typedef const data_type &reference;
+		typedef const data_type *pointer;
 		typedef typename std::ptrdiff_t difference_type;
 		typedef std::bidirectional_iterator_tag iterator_category;
 
@@ -224,9 +225,10 @@ namespace ft
 //**********************************************************//
 
 		reference operator*(void) const {return (node->val);}
-		//const_reference operator*(void) const {return (node->val);}
 		pointer operator->(void) const {return ( &(operator*()));}
-		//const_pointer operator->(void) const {return ( &(operator*()));}
+
+		reference operator*(void) {return (node->val);}
+		pointer operator->(void) {return ( &(operator*()));}
 
 //**********************************************************//
 // Incrementations                                          //
@@ -266,13 +268,6 @@ namespace ft
 // Overloading toward const                                 //
 //**********************************************************//
 
-	// const_tree_iterator &operator=(tree_iterator<value_type> const &src)
-	// 	{
-	// 		node = src.node;
-	// 		root = src.root;
-	// 		NIL = src.NIL;
-	// 		return *this;
-	// 	}
 
 		node_ptr root;
 		node_ptr NIL;
