@@ -10,7 +10,11 @@ namespace ft {
 	class vector
 	{
 	public:
-		//check http://www.cplusplus.com/reference/vector/vector/?kw=vector
+	//check http://www.cplusplus.com/reference/vector/vector/?kw=vector
+
+//**********************************************//
+// Member types                                 //
+//**********************************************//
 		typedef T		value_type;
 		typedef Alloc 	allocator_type;
 
@@ -42,8 +46,6 @@ namespace ft {
 			else
 				reserve(_max_capa * 2);
 		}
-
-		// void _grow_raw(size_type to_add) {reserve(_max_capa + to_add);};
 
 	public:
 //**********************************************//

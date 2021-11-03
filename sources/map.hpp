@@ -13,7 +13,7 @@ class map
 {
 
 //**********************************************************//
-// Variables                                                //
+// Member types                                             //
 //**********************************************************//
 
 public:
@@ -21,7 +21,6 @@ typedef Key key_type;
 typedef T mapped_type;
 typedef ft::pair<const key_type, mapped_type> value_type;
 typedef Compare key_compare;
-typedef Alloc allocator_type;
 
 class value_compare
 {
@@ -31,10 +30,11 @@ public:
 	~value_compare() {}
 
 	value_compare &operator=(const value_compare &) {return *this;}
-
 	bool operator()(const value_type &a, const value_type &b) const
 	{ return (key_compare()(a.first, b.first)); }
 };
+
+typedef Alloc allocator_type;
 
 private:
 	typedef typename ft::Tree<value_type, value_compare> mytree;
@@ -55,7 +55,7 @@ public:
 	typedef size_t size_type;
 
 //Rebinding, check this article http://www.cplusplus.com/reference/memory/allocator/
-//typedef typename Alloc::template rebind<Node<value_type> >::other allocator_reb;
+	//typedef typename Alloc::template rebind<Node<value_type> >::other allocator_reb;
 
 
 //**********************************************************//
@@ -109,7 +109,7 @@ const_iterator end() const {return (_tree.end());}
 iterator end() {return (_tree.end());}
 
 //rbegin
-const_reverse_iterator rebegin() const {(_tree.rbegin());}
+const_reverse_iterator rbegin() const {(_tree.rbegin());}
 reverse_iterator rbegin() {return (_tree.rbegin());}
 
 //rend

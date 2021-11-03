@@ -90,31 +90,15 @@ std::cout << std::endl << "***Here comes my version***" << std::endl;
 	{
 	ft::map<int, int> mymap;
 	ft::pair<int, int> tempaire;
+
 	ft::map<int, int>::iterator it = mymap.begin();
-	it = mymap.begin();
+	ft::map<int, int>::const_iterator itbis = mymap.begin();
+	
 	it->second = 12;
 	for (int i = 0; i < 10; i++)
 		mymap.insert(ft::pair<int, int>(i + 10, 10 * i));
-	//mymap._tree.printTree(mymap._tree.getRoot());
 	testerIntMap (mymap, tempaire);
 
-	// tempaire.first = 42;
-	// tempaire.second = 1;
-
-	// mytree.insertNode(mytree.getRoot(), tempaire);
-	
-	// mytree.deleteKey(tempaire.first);
-	// mytree.getMax();
-	// std::cout << "getMax ok" << std::endl;
-
-	// mytree.getMin();
-	// std::cout << "getMin ok" << std::endl;
-
-	// std::cout << "It works in a tree, now in a map" << std::endl;
-	// 	mymap.insert(tempaire);
-	// 	mymap.erase(tempaire.first);
-	std::cout << "Youpie" << std::endl;
-	std::cout << "mymap.begin().first " << mymap.begin()->first << std::endl;
 	std::cout << "tempaire.first " << tempaire.first << std::endl;
 
 	}

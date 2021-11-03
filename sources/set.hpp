@@ -11,7 +11,7 @@ namespace ft
 template < class T, class Compare = ft::less<T>, class Alloc = std::allocator<T> >
 class set
 {
-
+//http://www.cplusplus.com/reference/set/set/
 //**********************************************************//
 // Variables                                                //
 //**********************************************************//
@@ -39,6 +39,7 @@ public:
 	typedef typename mytree::const_reverse_iterator const_reverse_iterator;
 
 
+	typedef std::ptrdiff_t difference_type;
 	typedef size_t size_type;
 
 //Rebinding, check this article http://www.cplusplus.com/reference/memory/allocator/

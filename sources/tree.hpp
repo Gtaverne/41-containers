@@ -56,9 +56,6 @@ public:
 	typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
 
-public:
-
-
 	Tree(const allocator alloc = allocator()) : _comp(key_comparator()), _size (0)
 	{
 		_alloc = alloc;
@@ -132,6 +129,7 @@ void swap(Tree &rhs)
 	_root = temproot;
 }
 
+//Some elements are not used in set
 void swapSet(Tree &rhs)
 {
 	allocator tempal = rhs._alloc;
@@ -175,7 +173,7 @@ const_iterator iter_finder (value_type const &value) const
 	if (!found)
 		return end();
 	else
-		return iterator(found, _root, NIL);
+		return const_iterator(found, _root, NIL);
 }
 
 void clear()
@@ -252,6 +250,7 @@ public:
 		return _size;
 	}
 
+/* This in only used for debug
 	void printTree(node_ptr node, int i = 0)
 	{
 		if (!node && i == 0 && _root)
@@ -265,7 +264,7 @@ public:
 				printTree(node->right, i + 1);
 		}
 	}
-
+*/
 
 private:
 
@@ -629,10 +628,6 @@ Feel free to check the detail of RBT algo to understand the next function
 		const_iterator it = begin();
 		return const_reverse_iterator(it);
 	}
-
-
-
-
 
 };
 }
