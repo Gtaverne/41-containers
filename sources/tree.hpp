@@ -27,6 +27,7 @@ struct Node
 	Node *left;
 	Node *right;
 	Node *parent;
+	//bool loader; -> By altering the size of a node, you can twitch the max_size
 
 	Node(value_type const &val) : val(val) {} 
 };
@@ -47,14 +48,12 @@ public:
 	typedef size_t size_type;
 
 	typedef value_type& reference;
-	typedef const value_type& const_reference;
 	typedef value_type* pointer;
-	typedef const value_type* const_pointer;
 
 //for iterators
 	std::ptrdiff_t difference_type;
 	typedef ft::tree_iterator<node> iterator;
-	typedef ft::tree_iterator<node> const_iterator;
+	typedef ft::const_tree_iterator<node> const_iterator;
 	typedef ft::reverse_iterator<iterator> reverse_iterator;
 	typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
@@ -585,9 +584,9 @@ Feel free to check the detail of RBT algo to understand the next function
 //**********************************************************//
 
 	iterator begin(void) {return iterator(min_nd(_root), _root, NIL);}
-	const_iterator begin(void) const {return iterator(min_nd(_root), _root, NIL);}
+	const_iterator begin(void) const {return const_iterator(min_nd(_root), _root, NIL);}
 	iterator end(void) {return iterator(NIL, _root, NIL);}
-	const_iterator end(void) const {return iterator(NIL, _root, NIL);}
+	const_iterator end(void) const {return const_iterator(NIL, _root, NIL);}
 
 	reverse_iterator rbegin(void)
 	{

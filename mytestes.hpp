@@ -134,9 +134,9 @@ void testerIntMap(anymap &mymap, anypair &paire)
 	std::cout << "r_it == c_r_it: " << (r_it == c_r_it) << std::endl;
 
 
-	anypair tempaire = paire;
-	tempaire.first = 42;
-	tempaire.second = 84;
+	// anypair tempaire = paire;
+	// tempaire.first = 42;
+	// tempaire.second = 84;
 
 	std::cout << "it == it: " << (it == it) << std::endl;
 	std::cout << "it == c_it: " << (it == c_it) << std::endl;

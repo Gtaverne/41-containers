@@ -1,5 +1,5 @@
 NAME	=	containers
-CC		=	clang++
+CC		=	c++
 HEADER	=	sources/* mytestes.hpp
 OBJDIR	=	obj
 SRC		=	main.cpp

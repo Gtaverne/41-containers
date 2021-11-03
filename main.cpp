@@ -73,6 +73,10 @@ std::cout << "***Here comes the base case***" << std::endl;
 	std::pair<int, int> tempaire;
 
 	std::map<int, int>::iterator it = mymap.begin();
+	std::map<int, int>::const_iterator itbis = mymap.begin();
+
+	itbis = it;
+
 	it = mymap.end();
 
 	for (int i = 0; i < 10; i++)
