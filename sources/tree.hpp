@@ -40,8 +40,6 @@ public:
 	typedef T value_type;
 	typedef Compare key_comparator;
 	
-	typedef typename T::first_type key_type;
-	typedef typename T::second_type mapped_type;
 	typedef typename ft::Node<value_type> node;
 	typedef node *node_ptr ;
 	typedef Allocator allocator;
@@ -134,6 +132,26 @@ void swap(Tree &rhs)
 	_root = temproot;
 }
 
+void swapSet(Tree &rhs)
+{
+	allocator tempal = rhs._alloc;
+	size_type tempsize = rhs._size;
+	node_ptr tempnil = rhs.NIL;
+	node_ptr temproot = rhs._root;
+
+	rhs._alloc = _alloc;
+	_alloc = tempal;
+
+	rhs._size = _size;
+	_size = tempsize;
+
+	rhs.NIL = NIL;
+	NIL = tempnil;
+
+	rhs._root = _root;
+	_root = temproot;
+}
+
 node_ptr end_node() {return NIL;}
 
 node_ptr begin_node() {return min_nd(_root);}
@@ -172,9 +190,9 @@ void erase(iterator it)
 	_delete_node(it.node);
 }
 
-size_type keydeleter(const key_type& k)
+size_type keydeleter(value_type const &valdel)
 {
-	node_ptr found = value_finder(ft::make_pair(k, mapped_type()));
+	node_ptr found = value_finder(valdel);
 	if (found == NULL || found == NIL)
 		return 0;
 	_delete_node(found);
