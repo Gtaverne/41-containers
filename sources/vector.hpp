@@ -256,8 +256,11 @@ void push_back (const value_type &val)
 // pop_back
 void pop_back(void)
 {
-	_alloc_type.destroy(&_raw_data[_current_len - 1]);
-	_current_len--;
+	if (_current_len > 0)
+	{
+		_alloc_type.destroy(&_raw_data[_current_len - 1]);
+		_current_len--;
+	}
 }
 
 // insert

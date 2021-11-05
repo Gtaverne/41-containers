@@ -55,7 +55,7 @@ public:
 	typedef size_t size_type;
 
 //Rebinding, check this article http://www.cplusplus.com/reference/memory/allocator/
-	//typedef typename Alloc::template rebind<Node<value_type> >::other allocator_reb;
+	typedef typename allocator_type::template rebind<Node>::other node_allocator;
 
 
 //**********************************************************//
